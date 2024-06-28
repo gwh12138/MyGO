@@ -12,8 +12,19 @@ def login():
             'response':'input none'
         })
     
-    (user_id, user_name, password, permission)=search_account(user_id=user_id)
-    
+    res=search_account(user_id=user_id)
+    if not list:
+        return jsonify({
+            'response': 'error user_id'
+        })
+    elif res[2] != pwd:
+        return jsonify({
+            'response': 'error password'
+        })
+    else:
+        return jsonify({
+            'response': 'error user_id'
+        })
 
 
     
