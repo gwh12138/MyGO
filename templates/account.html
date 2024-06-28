@@ -56,13 +56,11 @@
             table.render({
                 elem: '#jsonTable',
                 cols: [[ // 标题栏
-                    {field: 'user_id', title: '用户id', width: 120, sort: true},
-                    {field: 'user_name', title: '用户名', width: 120, sort: true},
-                    {field: 'user_password', title: '密码', width: 120, templet: function(d){
-                        return '******';
-                    }},
-                    {field: 'user_role', title: '角色', width: 180},
-                    {title: '操作', width: 180, templet: function(d){
+                    {field: 'real_name', title: '职工姓名', width: 120, sort: true},
+                    {field: 'telephone', title: '电话号码', width: 120, sort: true},
+                    {field: 'birthday', title: '生日', width: 120, sort: true},
+                    {field: 'role', title: '角色', width: 180},
+                    {title: '删除', width: 180, templet: function(d){
                         return '<div class="td-manage">' +
                                '<a title="删除" onclick="member_del(this,\'' + d.user_id + '\')" href="javascript:;">' +
                                '<i class="layui-icon">&#xe640;</i></a>' +
