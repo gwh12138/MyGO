@@ -2,12 +2,12 @@ from secure import PasswordSecure
 from dbapi import *
 
 
-def add_account(user_name, password, permission) -> int or None:
+def add_account(user_name, password, role) -> int or None:
     """
     Add a new account
     :param user_name:
     :param password:
-    :param permission:
+    :param role:
     :return: user_id 添加成功 None 添加失败
     """
     db = None
@@ -15,9 +15,11 @@ def add_account(user_name, password, permission) -> int or None:
     try:
         db = get_db_connection()
         cursor = db.cursor()
+        if role is None:
+            role = 'user'
         password = PasswordSecure.encryption(password)
         sql = "INSERT INTO account (user_name, password, permission) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (user_name, password, permission))
+        cursor.execute(sql, (user_name, password, role))
         db.commit()
         result = cursor.lastrowid
     except pymysql.Error as e:
