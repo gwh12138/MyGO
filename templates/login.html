@@ -243,17 +243,8 @@
     <div class="container__form container--signup">
         <form action="#" class="form" id="form1">
             <h2 class="form__title">注册</h2>
-            <input type="text" placeholder="用户名" class="input" id="User_UP"/>
-
+            <input type="number" placeholder="用户名" class="input" id="User_UP"/>
             <input type="password" placeholder="密码" class="input" id="Password_UP"/>
-            <div class="dropdown">
-                <label for="role-select_UP">请选择您的角色:</label>
-                <select id="role-select_UP">
-                    <option value="customer">顾客</option>
-                    <option value="worker">员工</option>
-                    <option value="admin">管理员</option>
-                </select>
-            </div>
             <button class="btn" id="sign_UP">注册</button>
         </form>
     </div>
@@ -262,16 +253,8 @@
     <div class="container__form container--signin">
         <form action="#" class="form" id="form2">
             <h2 class="form__title">登录</h2>
-            <input type="text" placeholder="用户名" class="input" id="User_IN"/>
+            <input type="number" placeholder="用户名" class="input" id="User_IN"/>
             <input type="password" placeholder="密码" class="input" id="Password_IN"/>
-            <div class="dropdown">
-                <label for="role-select_IN">请选择您的角色:</label>
-                <select id="role-select_IN">
-                    <option value="customer">顾客</option>
-                    <option value="worker">员工</option>
-                    <option value="admin">管理员</option>
-                </select>
-            </div>
             <button class="btn" id="sign_IN">登录</button>
         </form>
     </div>
@@ -290,7 +273,7 @@
 </div>
 
 <script>
-     const signInBtn = document.getElementById("signIn");
+    const signInBtn = document.getElementById("signIn");
     const signUpBtn = document.getElementById("signUp");
     const fistForm = document.getElementById("form1");
     const secondForm = document.getElementById("form2");
@@ -313,12 +296,10 @@
 
     var username_up = document.getElementById("User_UP").value;
     var password_up = document.getElementById("Password_UP").value;
-    var role_up = document.getElementById("role-select_UP").value;
 
     var formData_up = {
         user_name: username_up,
-        pwd: password_up,
-        role: role_up,
+        pwd: password_up
     };
 
     fetch("/register", {
@@ -355,12 +336,10 @@
 
     var username_in = document.getElementById("User_IN").value;
     var password_in = document.getElementById("Password_IN").value;
-    var role_in = document.getElementById("role-select_IN").value;
 
     var formData_in = {
         user_name: username_in,
-        pwd: password_in,
-        role: role_in
+        pwd: password_in
     };
 
     fetch("/login", {
@@ -376,15 +355,7 @@
     })
     .then(function(response) {
         if (response.response === "success") {
-            if (role_in === "customer") {
-                window.location.href = "/index_customer.html?user_id=" + response.user_id + "&user_name=" + response.user_name;
-            } else if (role_in === "worker") {
-                window.location.href = "/index_worker.html?user_name="+ response.user_name;
-            } else if (role_in === "admin") {
-                window.location.href = "/index_admin.html?user_name="+ response.user_name;
-            } else {
-                alert("Invalid role.");
-            }
+            window.location.href = "/index_admin.html?user_id="+ username_in;
             return response.text();
         } else {
             alert(response.response);
