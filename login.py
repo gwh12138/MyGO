@@ -12,7 +12,7 @@ def login():
             'response':'input none'
         })
     
-    search_account(user_id=user_id)
+    (user_id, user_name, password, permission)=search_account(user_id=user_id)
     
 
 
