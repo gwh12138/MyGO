@@ -21,7 +21,10 @@ def add_account(user_name, password, role) -> int or None:
         sql = "INSERT INTO account (user_name, password, permission) VALUES (%s, %s, %s)"
         cursor.execute(sql, (user_name, password, role))
         db.commit()
+        if cursor.rowcount == 0:
+            return 0
         result = cursor.lastrowid
+        return result
     except pymysql.Error as e:
         print('Error: ', e)
         return None
