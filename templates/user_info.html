@@ -22,16 +22,10 @@
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
-                        <label for="user_id" class="layui-form-label">
-                            <span class="x-red">*</span>用户id</label>
+                        <label for="real_name" class="layui-form-label">
+                            <span class="x-red">*</span>用户姓名</label>
                         <div class="layui-input-inline">
-                            <input type="number" id="user_id" name="user_id" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="user_name" class="layui-form-label">
-                            <span class="x-red">*</span>用户名</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="user_name" name="user_name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="real_name" name="real_name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="telephone" class="layui-form-label">
@@ -65,11 +59,9 @@
             document.addEventListener('DOMContentLoaded', function() {
             // 解析URL查询参数
             var urlParams = new URLSearchParams(window.location.search);
-            var fieldId = {{field_id}};
-            var productId = {{product_id}};
-
+            var userId = {{user_id}};
             // 如果field_id存在，则发起请求获取数据
-            if (fieldId&&productId) {
+            if (userId) {
                 console.log('DOMContentLoaded 事件已触发');
                 fetch('./product_storage_list?product_id=' + fieldId + '&field_id=' + productId)
                 .then(function(response) {
@@ -89,12 +81,10 @@
             // 绑定提交按钮的点击事件
             document.getElementById('change').addEventListener('click', function(event) {
                 event.preventDefault(); // 阻止表单默认提交行为
+                var userId = {{user_id}};
                 // 收集表单数据
-                var fieldId = {{field_id}};
-                var productId = {{product_id}};
                 var formData = {
-                    user_id: document.getElementById('user_id').value,
-                    user_name: document.getElementById('user_name').value,
+                    real_name: document.getElementById('real_name').value,
                     telephone: document.getElementById('telephone').value,
                     birthday: document.getElementById('birthday').value,
                     work_experience: document.getElementById('work_experience').value
