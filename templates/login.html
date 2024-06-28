@@ -355,7 +355,7 @@
     })
     .then(function(response) {
         if (response.response === "success") {
-            window.location.href = "/index_admin.html?user_id="+ username_in;
+            window.location.href = "/index.html?user_name="+ username_in;
             return response.text();
         } else {
             alert(response.response);

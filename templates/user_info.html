@@ -50,8 +50,8 @@
             <label for="change" class="layui-form-label"></label>
             <button class="layui-btn" id="change" lay-filter="add" lay-submit="">修改</button></div>
         <div class="layui-card-header">
-            <button class="layui-btn" onclick="xadmin.open('产品入库','./storage_add.html',800,600)">
-                <i class="layui-icon"></i>添加</button></div>
+            <button class="layui-btn" onclick="xadmin.open('修改密码','./password_change.html?user_id=' + {{user_id}},800,600)">
+                <i class="layui-icon"></i>修改密码</button></div>
         </form>
         </div>
         </div>
@@ -63,22 +63,24 @@
             // 如果field_id存在，则发起请求获取数据
             if (userId) {
                 console.log('DOMContentLoaded 事件已触发');
-                fetch('./product_storage_list?product_id=' + fieldId + '&field_id=' + productId)
+                fetch('./product_storage_list?user_id=' + userId)
                 .then(function(response) {
                     return response.json();
                 })
                 .then(function(data) {
                     data = data.product_storage_list[0];
                     // 填充表单
-                    document.getElementById('product_quantity').value = data.product_quantity || '';
-                    document.getElementById('product_state').value = data.product_state || '';
+                    document.getElementById('real_name').value = data.real_name || '';
+                    document.getElementById('telephone').value = data.telephone || '';
+                    document.getElementById('birthday').value = data.birthday || '';
+                    document.getElementById('work_experience').value = data.work_experience || '';
                 })
                 .catch(function(error) {
                     layer.msg('获取目标数据失败', {icon: 5});
                 });
             }
 
-            // 绑定提交按钮的点击事件
+            // 绑定修改按钮的点击事件
             document.getElementById('change').addEventListener('click', function(event) {
                 event.preventDefault(); // 阻止表单默认提交行为
                 var userId = {{user_id}};
