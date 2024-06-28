@@ -63,7 +63,6 @@ def add_account(user_name, password, role) -> None | int:
         cursor = db.cursor()
         sql = "INSERT INTO dmygo.account (user_name, password, role) VALUES (%s, %s, %s)"
         cursor.execute(sql, (user_name, password, role))
-
         db.commit()
         user_id = cursor.lastrowid
     except pymysql.Error as e:

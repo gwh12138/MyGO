@@ -4,5 +4,3 @@ DATABASE = {
     'password': '123456',
     'db': 'dbse'
 }
-
-SECRET_KEY = "login"
