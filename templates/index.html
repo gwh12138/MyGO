@@ -75,66 +75,66 @@
         <div class="left-nav">
             <div id="side-nav">
                 <ul id="nav">
-                    <li>
+                    <li id="employee">
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="职工">&#xe6b8;</i>
                             <cite>职工</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('职工管理','welcome1.html')">
+                                <a onclick="xadmin.add_tab('职工管理','employee.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>职工管理</cite></a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li id="crop">
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="作物">&#xe723;</i>
                             <cite>作物</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('作物管理','order-list.html')">
+                                <a onclick="xadmin.add_tab('作物管理','crop.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>作物管理</cite></a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li id="plant">
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="种植">&#xe723;</i>
                             <cite>种植</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('种植管理','cate.html')">
+                                <a onclick="xadmin.add_tab('种植管理','plant.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>种植管理</cite></a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li id="field">
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="农田">&#xe723;</i>
                             <cite>农田</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('农田管理','city.html')">
+                                <a onclick="xadmin.add_tab('农田管理','field.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>农田管理</cite></a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li id="harvest">
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="收获">&#xe726;</i>
                             <cite>收获</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('收获管理','admin-list.html')">
+                                <a onclick="xadmin.add_tab('收获管理','harvest.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>收获管理</cite></a>
                             </li>
@@ -159,7 +159,7 @@
                 </div>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-                        <iframe src='./welcome.html' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                        <iframe src='./welcome.html?user_id={{user_id}}' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
                     </div>
                 </div>
                 <div id="tab_show"></div>
@@ -169,13 +169,45 @@
         <style id="theme_style"></style>
         <!-- 右侧主体结束 -->
         <!-- 中部结束 -->
-        <script>//百度统计可去掉
-            var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
+        <script>
+            document.addEventListener('DOMContentLoaded',function(){
+                var role = {{role}};
+                if(role === "admin" || role === "hr"){
+                    document.getElementById("member").style.display = "block";
+                }
+                else{
+                    document.getElementById("member").style.display = "none";
+                }
+                if(role === "admin" || role === "plant" || role === "harvest"){
+                    document.getElementById("crop").style.display = "block";
+                }
+                else{
+                    document.getElementById("crop").style.display = "none";
+                }
+                if(role === "admin" || role === "plant" || role === "harvest"){
+                    document.getElementById("plant").style.display = "block";
+                }
+                else{
+                    document.getElementById("plant").style.display = "none";
+                }
+                if(role === "admin" || role === "plant" || role === "field"){
+                    document.getElementById("field").style.display = "block";
+                }
+                else{
+                    document.getElementById("field").style.display = "none";
+                }
+                if(role === "admin" || role === "plant" || role === "harvest"){
+                    document.getElementById("harvest").style.display = "block";
+                }
+                else{
+                    document.getElementById("harvest").style.display = "none";
+                }
+
+                var user_id = {{user_id}};
+                var iframe = document.querySelector('.x-iframe');
+                iframe.src = './welcome.html?user_id='+user_id;
+            })
+        </script>
     </body>
 
 </html>
