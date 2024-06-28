@@ -45,7 +45,7 @@
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="土壤含钾值" name="K" id="K" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤ph值" name="pH" id="pH" type="number"></div>
+                                    <input class="layui-input" placeholder="土壤pH值" name="pH" id="pH" type="number"></div>
                             
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <button class="layui-btn" lay-submit="" lay-filter="search" id="search">
@@ -53,7 +53,7 @@
                                 </div>
                         </div>
                         <div class="layui-card-header">
-                            <button class="layui-btn" onclick="xadmin.open('添加田地','./field_add.html',800,600)">
+                            <button class="layui-btn" onclick="xadmin.open('添加田地','./field_add.html?user_id=' + {{user_id}} + '&role=' + {{role}},800,600)">
                                 <i class="layui-icon"></i>添加</button></div>
                         <div class="layui-card-body">
                             <table id="jsonTable" lay-filter="jsonTableFilter"></table>
@@ -84,8 +84,8 @@
             var role = {{role}};
             var user_id = {{user_id}};
             var cols = [
-                {field: 'field_name', title: '地块名字', width: 120},
-                {field: 'size', title: '地块大小', width: 180, sort: true},
+                {field: 'field_name', title: '农田名字', width: 120},
+                {field: 'size', title: '农田大小', width: 180, sort: true},
                 {field: 'crop_class', title: '种植作物类型', width: 180, sort: true},
                 {field: 'latitude', title: '纬度', width: 180, sort: true},
                 {field: 'longitude', title: '经度', width: 180, sort: true},
@@ -123,12 +123,12 @@
         }
 
         window.member_info = function(obj, field_id){
-            xadmin.open('地块详情信息','./field_info.html?field_id=' + field_id);
+            xadmin.open('农田详情信息','./field_info.html?field_id=' + field_id);
         }
 
         window.member_change = function(obj, field_id, user_id, role) {
             // 打开新的网页，传递ID参数
-            var index = xadmin.open('修改地块','./field_change.html?field_id=' + field_id + '&user_id=' + user_id + '&role=' + role);
+            var index = xadmin.open('修改农田','./field_change.html?field_id=' + field_id + '&user_id=' + user_id + '&role=' + role);
 
             xadmin.set_close_list(index,function(){
                 onClose();
