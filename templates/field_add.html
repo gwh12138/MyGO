@@ -76,11 +76,22 @@
                             <input type="number" id="pH" name="pH" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
 
-        <div class="layui-form-item">
-            <label for="L_repass" class="layui-form-label"></label>
-            <button class="layui-btn" id="L_repass" lay-filter="add" lay-submit="">增加</button></div>
-        </form>
-        </div>
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" id="L_repass" lay-filter="add" lay-submit="">增加</button></div>
+                </form>
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <blockquote class="layui-elem-quote">
+                            土壤指标预览
+                        </blockquote>
+                        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                        <div id="main" style="width: 100%;height:400px;"></div>
+                        <blockquote class="layui-elem-quote">
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -116,6 +127,59 @@
                 });
             });
         });
+        </script>
+        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+            
+            var pH = document.getElementById('pH').value;
+            var N = document.getElementById('N').value;
+            var P = document.getElementById('P').value;
+            var K = document.getElementById('K').value;
+            var option = {
+                title: {
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                },
+                radar: [
+                    // 第一个雷达图配置
+                    {
+                        // 雷达图的指标
+                        indicator: [
+                            { name: '土壤pH值', max: 14 },
+                            { name: '土壤含氮值', max: 0.15, min: 0.01 },
+                            { name: '土壤含磷值', max: 0.25, min: 0.05 },
+                            { name: '土壤含钾值', max: 0.35, min: 0.05 },
+                        ],
+                        // 雷达图中心点位置
+                        center: ['25%', '50%'],
+                        // 雷达图半径
+                        radius: '55%'
+                    }
+                ],
+                series: [
+                    // 第一个雷达图的数据系列
+                    {
+                        type: 'radar',
+                        // 指定当前系列数据对应的雷达图下标
+                        // 数据内容
+                        data: [
+                            {
+                                value: [pH,N,P,K]
+                            }
+                        ]
+                        // 其他配置...
+                    }
+    
+                ]
+            };
+    
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
         </script>
         <script>var _hmt = _hmt || []; (function() {
                 var hm = document.createElement("script");
