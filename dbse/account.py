@@ -13,5 +13,5 @@ def change_account(user_id, user_name=None, password=None, permission=None) -> b
     pass
 
 
-def search_account(user_id=None, user_name=None, password=None, permission=None) -> bool:
+def search_account(user_id=None, user_name=None, password=None, permission=None):
     pass
