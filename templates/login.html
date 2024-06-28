@@ -249,7 +249,6 @@
             <div class="dropdown">
                 <label for="role-select_UP">请选择您的角色:</label>
                 <select id="role-select_UP">
-                    <option value="customer">顾客</option>
                     <option value="worker">员工</option>
                     <option value="admin">管理员</option>
                 </select>
@@ -264,14 +263,6 @@
             <h2 class="form__title">登录</h2>
             <input type="text" placeholder="用户名" class="input" id="User_IN"/>
             <input type="password" placeholder="密码" class="input" id="Password_IN"/>
-            <div class="dropdown">
-                <label for="role-select_IN">请选择您的角色:</label>
-                <select id="role-select_IN">
-                    <option value="customer">顾客</option>
-                    <option value="worker">员工</option>
-                    <option value="admin">管理员</option>
-                </select>
-            </div>
             <button class="btn" id="sign_IN">登录</button>
         </form>
     </div>
@@ -359,8 +350,7 @@
 
     var formData_in = {
         user_name: username_in,
-        pwd: password_in,
-        role: role_in
+        pwd: password_in
     };
 
     fetch("/login", {
