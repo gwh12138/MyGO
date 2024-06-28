@@ -1,5 +1,5 @@
 from secure import PasswordSecure
-from dbapi import *
+from connection import *
 
 
 def add_account(user_name, password, role) -> int or None:
@@ -8,7 +8,7 @@ def add_account(user_name, password, role) -> int or None:
     :param user_name:
     :param password:
     :param role:
-    :return: user_id 添加成功 None 添加失败
+    :return: user_id 添加成功 None 出错
     """
     db = None
     result = 0
@@ -50,12 +50,12 @@ def del_account(user_id, password) -> bool or None:
         db.commit()
         if cursor.rowcount == 0:
             return False
+        return True
     except pymysql.Error as e:
         print('Error: ', e)
         return None
     finally:
         close_db_connection(db)
-    return True
 
 
 def change_account(user_id, user_name=None, password=None, permission=None) -> bool or None:
@@ -65,7 +65,7 @@ def change_account(user_id, user_name=None, password=None, permission=None) -> b
     :param user_name:
     :param password:
     :param permission:
-    :return: True 添加成功 False 添加失败 None 出错
+    :return: True 修改成功 False 修改失败 None 出错
     """
     db = None
     try:
@@ -75,20 +75,21 @@ def change_account(user_id, user_name=None, password=None, permission=None) -> b
         params = {'user_name': user_name, 'password': password, 'permission': permission}
 
         update_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
-        sql = "UPDATE account SET " + ", ".join(update_parts) + " WHERE user_id = %s"
-
-        values = tuple(value for value in params.values() if value is not None) + (user_id,)
-
-        cursor.execute(sql, values)
-        db.commit()
-        if cursor.rowcount == 0:
+        if update_parts:
+            sql = "UPDATE account SET " + ", ".join(update_parts) + " WHERE user_id = %s"
+            values = tuple(value for value in params.values() if value is not None) + (user_id,)
+            cursor.execute(sql, values)
+            db.commit()
+            if cursor.rowcount == 0:
+                return False
+            return True
+        else:
             return False
     except pymysql.Error as e:
         print('Error: ', e)
         return None
     finally:
         close_db_connection(db)
-    return True
 
 
 def search_account(user_id=None, user_name=None, password=None, permission=None) -> list or None:
@@ -108,11 +109,13 @@ def search_account(user_id=None, user_name=None, password=None, permission=None)
         params = {'user_id': user_id, 'user_name': user_name, 'password': password, 'permission': permission}
 
         query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
-        sql = "SELECT * FROM account WHERE " + " AND ".join(query_parts)
-
-        values = tuple(value for value in params.values() if value is not None)
-
-        cursor.execute(sql, values)
+        if query_parts:
+            sql = "SELECT * FROM account WHERE " + " AND ".join(query_parts)
+            values = tuple(value for value in params.values() if value is not None)
+            cursor.execute(sql, values)
+        else:
+            sql = "SELECT * FROM account"
+            cursor.execute(sql)
         result = cursor.fetchall()
         return result
     except pymysql.Error as e:
