@@ -18,7 +18,7 @@ def login():
         return jsonify({
             'response': 'error user_name'
         })
-    elif res != pwd:
+    elif res[2] != pwd:
         return jsonify({
             'response': 'error password'
         })
@@ -33,23 +33,28 @@ def login():
 def register():
     user_name = request.json.get("user_name")
     password = request.json.get("pwd")
+    role = request.json.get("role")
     real_name = request.json.get("real_name")
     telephone = request.json.get("telephone")
     birthday = request.json.get("birthday")
-    work_experlence = request.json.get("work_experlence")
+    work_experience = request.json.get("work_experience")
 
     if user_name is None or password is None:
         return jsonify({
             'response':'input none'
         })
     
-    user_id = add_account(user_name, password,None)
-    if user_id == 0:
+    user_id = add_account(user_name, password, role)
+    if user_id is None:
+        return jsonify({
+            'response':'500'
+        })
+    elif user_id == 0:
         return jsonify({
             'response':'same user name'
         })
     
-    add_employee_info(user_id, real_name=real_name, telephone=telephone, birthday=birthday, work_experlence=work_experlence, profile=None)
+    add_employee_info(user_id, real_name=real_name, telephone=telephone, birthday=birthday, work_experience=work_experience, profile=None)
     return jsonify({
             'response':'success'
         })

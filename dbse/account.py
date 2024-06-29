@@ -1,5 +1,5 @@
-from secure import PasswordSecure
-from connection import *
+from dbse.secure import PasswordSecure
+from dbse.connection import *
 
 
 def add_account(user_name, password, role) -> int or None:
@@ -18,7 +18,7 @@ def add_account(user_name, password, role) -> int or None:
         if role is None:
             role = 'user'
         password = PasswordSecure.encryption(password)
-        sql = "INSERT INTO account (user_name, password, permission) VALUES (%s, %s, %s)"
+        sql = "INSERT INTO account (user_name, password, role) VALUES (%s, %s, %s)"
         cursor.execute(sql, (user_name, password, role))
         db.commit()
         if cursor.rowcount == 0:
@@ -30,7 +30,6 @@ def add_account(user_name, password, role) -> int or None:
         return None
     finally:
         close_db_connection(db)
-
 
 
 def del_account(user_id, password) -> bool or None:
@@ -120,8 +119,10 @@ def search_account(user_id=None, user_name=None, password=None, permission=None)
             sql = "SELECT * FROM account"
             cursor.execute(sql)
         result = cursor.fetchall()
+        result = [list(row) for row in result]
         for row in result:
             row[2] = PasswordSecure.decryption(row[2])
+        result = [tuple(row) for row in result]
         return result
     except pymysql.Error as e:
         print('Error: ', e)
@@ -129,3 +130,31 @@ def search_account(user_id=None, user_name=None, password=None, permission=None)
     finally:
         if db:
             close_db_connection(db)
+
+
+def add_account_batch(account_list: list) -> list or None:
+    """
+    Add multiple accounts
+    :param account_list: [(user_name, password, role), ...]
+    :return: [user_id, ...]
+    """
+    db = None
+    result = []
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+
+        account_list = [(user_name, PasswordSecure.encryption(password), role) for user_name, password, role in account_list]
+
+        sql = "INSERT INTO account (user_name, password, role) VALUES (%s, %s, %s)"
+        cursor.executemany(sql, account_list)
+        db.commit()
+
+        # 获取所有新插入的user_id
+        result = [row[0] for row in cursor.fetchall()]
+        return result
+    except pymysql.Error as e:
+        print('Error: ', e)
+        return None
+    finally:
+        close_db_connection(db)

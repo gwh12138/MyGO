@@ -1,9 +1,10 @@
 from connection import *
 
 
-def add_plant_info(crop_id, field_id, plant_date, size, longitude, latitude) -> int or None:
+def add_plant_info(crop_id, field_id, plant_date,crop_state, size, longitude, latitude) -> int or None:
     """
     Add a new plant info
+    :param crop_state:
     :param crop_id:
     :param field_id:
     :param plant_date:
@@ -16,9 +17,9 @@ def add_plant_info(crop_id, field_id, plant_date, size, longitude, latitude) -> 
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        sql = ("INSERT INTO plant_info (crop_id, field_id, plant_date, size,longitude,latitude) VALUES ("
-               "%s, %s, %s, %s, %s, %s)")
-        cursor.execute(sql, (crop_id, field_id, plant_date, size, longitude, latitude))
+        sql = ("INSERT INTO plant_info (crop_id, field_id, plant_date, crop_state,size,longitude,latitude) VALUES ("
+               "%s, %s, %s, %s, %s, %s, %s)")
+        cursor.execute(sql, (crop_id, field_id, plant_date, crop_state, size, longitude, latitude))
         db.commit()
         if cursor.rowcount == 0:
             return 0
@@ -54,9 +55,10 @@ def del_plant_info(crop_id, field_id) -> bool or None:
         close_db_connection(db)
 
 
-def change_plant_info(field_id, crop_id, plant_date=None, size=None, longitude=None, latitude=None) -> bool or None:
+def change_plant_info(field_id, crop_id, plant_date=None, crop_state=None, size=None, longitude=None, latitude=None) -> bool or None:
     """
     Change plant info
+    :param crop_state:
     :param field_id:
     :param crop_id:
     :param plant_date:
@@ -69,7 +71,7 @@ def change_plant_info(field_id, crop_id, plant_date=None, size=None, longitude=N
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        params = {"plant_date": plant_date, "size": size, "longitude": longitude, "latitude": latitude}
+        params = {"plant_date": plant_date, "crop_state":crop_state, "size": size, "longitude": longitude, "latitude": latitude}
 
         quary_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
 
@@ -87,10 +89,11 @@ def change_plant_info(field_id, crop_id, plant_date=None, size=None, longitude=N
         close_db_connection(db)
 
 
-def search_plant_info(field_id=None, crop_id=None, plant_date=None, size=None, longitude=None,
+def search_plant_info(field_id=None, crop_id=None, plant_date=None, crop_state=None, size=None, longitude=None,
                       latitude=None) -> list or None:
     """
     Search plant info
+    :param crop_state:
     :param field_id:
     :param crop_id:
     :param plant_date:
@@ -103,7 +106,7 @@ def search_plant_info(field_id=None, crop_id=None, plant_date=None, size=None, l
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        params = {"field_id": field_id, "crop_id": crop_id, "plant_date": plant_date,
+        params = {"field_id": field_id, "crop_id": crop_id, "plant_date": plant_date, "crop_state":crop_state,
                   "size": size, "longitude": longitude, "latitude": latitude}
         query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
         if query_parts:
