@@ -55,25 +55,25 @@
                         <label for="N" class="layui-form-label">
                             <span class="x-red">*</span>土壤含氮(0~0.15)</label>
                         <div class="layui-input-inline">
-                            <input type="number" step="0.01" oninput="if(value < 0)value = 0;if(value > 0.15)value = 0.15" id="N" name="N" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="number" step="any" oninput="if(value < 0)value = 0;if(value > 0.15)value = 0.15" id="N" name="N" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="P" class="layui-form-label">
                             <span class="x-red">*</span>土壤含磷(0~0.25)</label>
                         <div class="layui-input-inline">
-                            <input type="number" step="0.01" oninput="if(value < 0)value = 0;if(value > 0.25)value = 0.25" id="P" name="P" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="number" step="any" oninput="if(value < 0)value = 0;if(value > 0.25)value = 0.25" id="P" name="P" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="K" class="layui-form-label">
                             <span class="x-red">*</span>土壤含钾(0~0.35)</label>
                         <div class="layui-input-inline">
-                            <input type="number" step="0.01" oninput="if(value < 0)value = 0;if(value > 0.35)value = 0.35" id="K" name="K" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="number" step="any" oninput="if(value < 0)value = 0;if(value > 0.35)value = 0.35" id="K" name="K" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="pH" class="layui-form-label">
                             <span class="x-red">*</span>土壤pH值(0~14)</label>
                         <div class="layui-input-inline">
-                            <input type="number" oninput="if(value < 0)value = 0;if(value > 14)value = 14" id="pH" name="pH" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="number" step="any" oninput="if(value < 0)value = 0;if(value > 14)value = 14" id="pH" name="pH" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
 
                     <div class="layui-form-item">
@@ -97,31 +97,38 @@
             document.addEventListener('DOMContentLoaded', function() {
             // 解析URL查询参数
             var urlParams = new URLSearchParams(window.location.search);
-            var fieldId = {{field_id}};
 
-            // 如果field_id存在，则发起请求获取数据
-            if (fieldId) {
-                console.log('DOMContentLoaded 事件已触发');
-                fetch('./field_list?field_id=' + fieldId)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(data) {
-                    data = data.field_list[0];
-                    // 填充表单
-                    document.getElementById('field_name').value = data.field_name || '';
-                    document.getElementById('size').value = data.size || '';
-                    document.getElementById('latitude').value = data.latitude || '';
-                    document.getElementById('longitude').value = data.longitude || '';
-                    document.getElementById('N').value = data.N || '';
-                    document.getElementById('P').value = data.P || '';
-                    document.getElementById('K').value = data.K || '';
-                    document.getElementById('pH').value = data.pH || '';
-                })
-                .catch(function(error) {
-                    layer.msg('获取目标数据失败', {icon: 5});
-                });
-            }
+            var queryParams = {
+                field_id: {{field_id}}
+            };
+
+            console.log('DOMContentLoaded 事件已触发');
+            fetch('./field_list',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(queryParams)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                data = data.field_list[0];
+                // 填充表单
+                document.getElementById('field_name').value = data.field_name || '';
+                document.getElementById('size').value = data.size || '';
+                document.getElementById('crop_class').value = data.crop_class;
+                document.getElementById('latitude').value = data.latitude || '';
+                document.getElementById('longitude').value = data.longitude || '';
+                document.getElementById('N').value = data.N || '';
+                document.getElementById('P').value = data.P || '';
+                document.getElementById('K').value = data.K || '';
+                document.getElementById('pH').value = data.pH || '';
+            })
+            .catch(function(error) {
+                layer.msg('获取目标数据失败', {icon: 5});
+            });
 
             // 绑定提交按钮的点击事件
             document.getElementById('change').addEventListener('click', function(event) {
@@ -129,6 +136,8 @@
                 // 收集表单数据
                 var fieldId = {{field_id}};
                 var formData = {
+                    user_id: {{user_id}},
+                    role: {{role}},
                     field_id: fieldId,
                     field_name: document.getElementById('field_name').value,
                     size: document.getElementById('size').value,
@@ -142,7 +151,7 @@
                 };
 
                 // 发送数据到后端进行更新
-                fetch('./change_field?user_id=' + {{user_id}} + '&role=' + {{role}}, {
+                fetch('./change_field', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
