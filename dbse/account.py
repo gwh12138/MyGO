@@ -8,7 +8,7 @@ def add_account(user_name, password, role) -> int or None:
     :param user_name:
     :param password:
     :param role:
-    :return: user_id 添加成功 None 出错
+    :return: user_id 添加成功 0 添加失败 None 出错
     """
     db = None
     result = 0
@@ -30,7 +30,7 @@ def add_account(user_name, password, role) -> int or None:
         return None
     finally:
         close_db_connection(db)
-    return result
+
 
 
 def del_account(user_id, password) -> bool or None:
@@ -44,7 +44,8 @@ def del_account(user_id, password) -> bool or None:
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        password = PasswordSecure.encryption(password)
+        if (password is not None):
+            password = PasswordSecure.encryption(password)
         sql = "DELETE FROM account WHERE user_id = %s AND password = %s"
         cursor.execute(sql, (user_id, password))
         db.commit()
@@ -71,7 +72,8 @@ def change_account(user_id, user_name=None, password=None, permission=None) -> b
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        password = PasswordSecure.encryption(password)
+        if (password is not None):
+            password = PasswordSecure.encryption(password)
         params = {'user_name': user_name, 'password': password, 'permission': permission}
 
         update_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
@@ -105,7 +107,8 @@ def search_account(user_id=None, user_name=None, password=None, permission=None)
     try:
         db = get_db_connection()
         cursor = db.cursor()
-
+        if (password is not None):
+            password = PasswordSecure.encryption(password)
         params = {'user_id': user_id, 'user_name': user_name, 'password': password, 'permission': permission}
 
         query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
@@ -117,6 +120,8 @@ def search_account(user_id=None, user_name=None, password=None, permission=None)
             sql = "SELECT * FROM account"
             cursor.execute(sql)
         result = cursor.fetchall()
+        for row in result:
+            row[2] = PasswordSecure.decryption(row[2])
         return result
     except pymysql.Error as e:
         print('Error: ', e)

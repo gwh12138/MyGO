@@ -22,10 +22,4 @@ class PasswordSecure:
         return plaintext.decode('utf-8')
 
 
-# Example usage:
-password = 'abc123456'
-ciphertext = PasswordSecure.encryption(password)
-print("Encrypted:", ciphertext)
 
-decrypted_password = PasswordSecure.decryption(ciphertext)
-print("Decrypted:", decrypted_password)
