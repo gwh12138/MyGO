@@ -93,31 +93,37 @@
             document.addEventListener('DOMContentLoaded', function() {
             // 解析URL查询参数
             var urlParams = new URLSearchParams(window.location.search);
-            var fieldId = {{field_id}};
+            var queryParams = {
+                field_id: {{field_id}}
+            };
 
-            // 如果field_id存在，则发起请求获取数据
-            if (fieldId) {
-                console.log('DOMContentLoaded 事件已触发');
-                fetch('./field_list?field_id=' + fieldId)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(data) {
-                    data = data.field_list[0];
-                    // 填充表单
-                    document.getElementById('field_name').innerText = data.field_name || '';
-                    document.getElementById('size').innerText = data.size || '';
-                    document.getElementById('latitude').innerText = data.latitude || '';
-                    document.getElementById('longitude').innerText = data.longitude || '';
-                    document.getElementById('N').innerText = data.N || '';
-                    document.getElementById('P').innerText = data.P || '';
-                    document.getElementById('K').innerText = data.K || '';
-                    document.getElementById('pH').innerText = data.pH || '';
-                })
-                .catch(function(error) {
-                    layer.msg('获取目标数据失败', {icon: 5});
-                });
-            }
+            console.log('DOMContentLoaded 事件已触发');
+            fetch('./field_list?',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(queryParams)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                data = data.field_list[0];
+                // 填充表单
+                document.getElementById('field_name').innerText = data.field_name || '';
+                document.getElementById('size').innerText = data.size || '';
+                document.getElementById('crop_class').innerText = data.crop_class || '';
+                document.getElementById('latitude').innerText = data.latitude || '';
+                document.getElementById('longitude').innerText = data.longitude || '';
+                document.getElementById('N').innerText = data.N || '';
+                document.getElementById('P').innerText = data.P || '';
+                document.getElementById('K').innerText = data.K || '';
+                document.getElementById('pH').innerText = data.pH || '';
+            })
+            .catch(function(error) {
+                layer.msg('获取目标数据失败', {icon: 5});
+            });
 
         });
         </script>
