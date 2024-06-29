@@ -243,8 +243,8 @@
     <div class="container__form container--signup">
         <form action="#" class="form" id="form1">
             <h2 class="form__title">注册</h2>
-            <input type="number" placeholder="用户名" class="input" id="User_UP"/>
-            <input type="password" placeholder="密码" class="input" id="Password_UP"/>
+            <input type="text" placeholder="用户名" class="input" id="User_UP"/>
+            <input type="password" placeholder="密码（不超过20个字符）" class="input" id="Password_UP" maxlength="20"/>
             <button class="btn" id="sign_UP">注册</button>
         </form>
     </div>
@@ -253,7 +253,7 @@
     <div class="container__form container--signin">
         <form action="#" class="form" id="form2">
             <h2 class="form__title">登录</h2>
-            <input type="number" placeholder="用户名" class="input" id="User_IN"/>
+            <input type="text" placeholder="用户名" class="input" id="User_IN"/>
             <input type="password" placeholder="密码" class="input" id="Password_IN"/>
             <button class="btn" id="sign_IN">登录</button>
         </form>

@@ -17,7 +17,7 @@
         <div class="x-nav">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
-                <a href="">农田管理</a>
+                <a href="">作物管理</a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
                 <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
@@ -29,23 +29,13 @@
                     <div class="layui-card">
                         <div class="layui-card-body ">
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="农田名字" name="field_name" id="field_name"></div>
+                                    <input class="layui-input" placeholder="作物名字" name="crop_name" id="crop_name"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="农田大小" name="size" id="size" type="number"></div>
+                                    <input class="layui-input" placeholder="作物类型" name="crop_class" id="crop_class"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="种植作物类型" name="crop_class" id="crop_class"></div>
+                                    <input class="layui-input" placeholder="生长周期（天）" name="birth_cycle" id="birth_cycle" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="纬度" name="latitude" id="latitude" type="number"></div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="经度" name="longitude" id="longitude" type="number"></div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤含氮" name="N" id="N" type="number"></div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤含磷" name="P" id="P" type="number"></div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤含钾" name="K" id="K" type="number"></div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤pH值" name="pH" id="pH" type="number"></div>
+                                    <input class="layui-input" placeholder="亩产" name="yield_per" id="yield_per" type="number"></div>
                             
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <button class="layui-btn" lay-submit="" lay-filter="search" id="search">
@@ -53,7 +43,7 @@
                                 </div>
                         </div>
                         <div class="layui-card-header">
-                            <button class="layui-btn" onclick="xadmin.open('添加田地','./field_add.html?user_id=' + {{user_id}} + '&role=' + {{role}},800,600)">
+                            <button class="layui-btn" onclick="xadmin.open('添加作物','./crop_add.html?user_id=' + {{user_id}} + '&role=' + {{role}},800,600)">
                                 <i class="layui-icon"></i>添加</button></div>
                         <div class="layui-card-body">
                             <table id="jsonTable" lay-filter="jsonTableFilter"></table>
@@ -84,14 +74,13 @@
             var role = {{role}};
             var user_id = {{user_id}};
             var cols = [
-                {field: 'field_name', title: '农田名字', width: 120},
-                {field: 'size', title: '农田大小', width: 180, sort: true},
-                {field: 'crop_class', title: '种植作物类型', width: 180, sort: true},
-                {field: 'latitude', title: '纬度', width: 180, sort: true},
-                {field: 'longitude', title: '经度', width: 180, sort: true},
+                {field: 'crop_name', title: '作物名字', width: 120},
+                {field: 'crop_class', title: '作物类型', width: 180, sort: true},
+                {field: 'birth_cycle', title: '生长周期', width: 180, sort: true},
+                {field: 'yield_per', title: '亩产', width: 180, sort: true},
                 {title: '详情', width: 180, templet: function(d){
                     return '<div class="td-manage">' +
-                            '<a title="详情" onclick="member_idfo(this,\'' + d.field_id + '\')" href="javascript:;">' +
+                            '<a title="详情" onclick="member_idfo(this,\'' + d.crop_id + '\')" href="javascript:;">' +
                             '<i class="layui-icon">&#xe63c;</i></a>' +
                             '</div>';
                 }}

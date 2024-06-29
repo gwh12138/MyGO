@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>欢迎页面-X-admin2.2</title>
+        <title>MyGO2.0</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -23,40 +23,75 @@
                 <form class="layui-form">
                     <div class="layui-form-item">
                         <label for="field_name" class="layui-form-label">
-                            <span class="x-red">*</span>地块名字</label>
+                            <span class="x-red">*</span>田地名字</label>
                         <div class="layui-input-inline">
                             <input type="text" id="field_name" name="field_name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="field_pos" class="layui-form-label">
-                            <span class="x-red">*</span>地块位置</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="field_pos" name="field_pos" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
                         <label for="size" class="layui-form-label">
-                            <span class="x-red">*</span>地块大小</label>
+                            <span class="x-red">*</span>田地大小</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="size" name="size" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="number" id="size" name="size" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="field_class" class="layui-form-label">
-                            <span class="x-red">*</span>地块类型</label>
+                        <label for="crop_class" class="layui-form-label">
+                            <span class="x-red">*</span>种植作物类型</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="field_class" name="field_class" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="crop_class" name="crop_class" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="field_outcome" class="layui-form-label">
-                            <span class="x-red">*</span>地块产出</label>
+                        <label for="latitude" class="layui-form-label">
+                            <span class="x-red">*</span>纬度</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="field_outcome" name="field_outcome" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                           <input type="number" id="latitude" name="latitude" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="longitude" class="layui-form-label">
+                            <span class="x-red">*</span>经度</label>
+                        <div class="layui-input-inline">
+                            <input type="number" id="longitude" name="longitude" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="N" class="layui-form-label">
+                            <span class="x-red">*</span>土壤含氮(0~0.15)</label>
+                        <div class="layui-input-inline">
+                            <input type="number" step="0.01" oninput="if(value < 0)value = 0;if(value > 0.15)value = 0.15" id="N" name="N" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="P" class="layui-form-label">
+                            <span class="x-red">*</span>土壤含磷(0~0.25)</label>
+                        <div class="layui-input-inline">
+                            <input type="number" step="0.01" oninput="if(value < 0)value = 0;if(value > 0.25)value = 0.25" id="P" name="P" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="K" class="layui-form-label">
+                            <span class="x-red">*</span>土壤含钾(0~0.35)</label>
+                        <div class="layui-input-inline">
+                            <input type="number" step="0.01" oninput="if(value < 0)value = 0;if(value > 0.35)value = 0.35" id="K" name="K" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="pH" class="layui-form-label">
+                            <span class="x-red">*</span>土壤pH值(0~14)</label>
+                        <div class="layui-input-inline">
+                            <input type="number" oninput="if(value < 0)value = 0;if(value > 14)value = 14" id="pH" name="pH" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
 
-        <div class="layui-form-item">
-            <label for="change" class="layui-form-label"></label>
-            <button class="layui-btn" id="change" lay-filter="add" lay-submit="">提交</button></div>
-        </form>
-        </div>
+                    <div class="layui-form-item">
+                        <label for="change" class="layui-form-label"></label>
+                        <button class="layui-btn" id="change" lay-filter="add" lay-submit="">提交</button></div>
+                </form>
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <blockquote class="layui-elem-quote">
+                            土壤指标预览
+                        </blockquote>
+                        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                        <div id="main" style="width: 100%;height:400px;"></div>
+                        <blockquote class="layui-elem-quote">
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -75,10 +110,13 @@
                     data = data.field_list[0];
                     // 填充表单
                     document.getElementById('field_name').value = data.field_name || '';
-                    document.getElementById('field_pos').value = data.field_pos || '';
-                    document.getElementById('size').value = data.field_size || '';
-                    document.getElementById('field_class').value = data.field_class || '';
-                    document.getElementById('field_outcome').value = data.field_outcome || '';
+                    document.getElementById('size').value = data.size || '';
+                    document.getElementById('latitude').value = data.latitude || '';
+                    document.getElementById('longitude').value = data.longitude || '';
+                    document.getElementById('N').value = data.N || '';
+                    document.getElementById('P').value = data.P || '';
+                    document.getElementById('K').value = data.K || '';
+                    document.getElementById('pH').value = data.pH || '';
                 })
                 .catch(function(error) {
                     layer.msg('获取目标数据失败', {icon: 5});
@@ -93,14 +131,18 @@
                 var formData = {
                     field_id: fieldId,
                     field_name: document.getElementById('field_name').value,
-                    field_pos: document.getElementById('field_pos').value,
-                    field_size: document.getElementById('size').value,
-                    field_class: document.getElementById('field_class').value,
-                    field_outcome: document.getElementById('field_outcome').value
+                    size: document.getElementById('size').value,
+                    crop_class: document.getElementById('crop_class').value,
+                    latitude: document.getElementById('latitude').value,
+                    longitude: document.getElementById('longitude').value,
+                    N: document.getElementById('N').value,
+                    P: document.getElementById('P').value,
+                    K: document.getElementById('K').value,
+                    pH: document.getElementById('pH').value,
                 };
 
                 // 发送数据到后端进行更新
-                fetch('./change_field', {
+                fetch('./change_field?user_id=' + {{user_id}} + '&role=' + {{role}}, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -124,6 +166,59 @@
                 });
             });
         });
+        </script>
+        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+            
+            var pH = document.getElementById('pH').value;
+            var N = document.getElementById('N').value;
+            var P = document.getElementById('P').value;
+            var K = document.getElementById('K').value;
+            var option = {
+                title: {
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                },
+                radar: [
+                    // 第一个雷达图配置
+                    {
+                        // 雷达图的指标
+                        indicator: [
+                            { name: '土壤pH值', max: 14 },
+                            { name: '土壤含氮', max: 0.15, min: 0 },
+                            { name: '土壤含磷', max: 0.25, min: 0 },
+                            { name: '土壤含钾', max: 0.35, min: 0 },
+                        ],
+                        // 雷达图中心点位置
+                        center: ['25%', '50%'],
+                        // 雷达图半径
+                        radius: '55%'
+                    }
+                ],
+                series: [
+                    // 第一个雷达图的数据系列
+                    {
+                        type: 'radar',
+                        // 指定当前系列数据对应的雷达图下标
+                        // 数据内容
+                        data: [
+                            {
+                                value: [pH,N,P,K]
+                            }
+                        ]
+                        // 其他配置...
+                    }
+    
+                ]
+            };
+    
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
         </script>
         <script>var _hmt = _hmt || []; (function() {
                 var hm = document.createElement("script");
