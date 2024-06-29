@@ -22,45 +22,36 @@
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
-                        <label for="field_id" class="layui-form-label">
-                            <span class="x-red">*</span>地块id</label>
+                        <label for="real_name" class="layui-form-label">
+                            <span class="x-red">*</span>用户姓名</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="field_id" name="field_id" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="real_name" name="real_name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="field_name" class="layui-form-label">
-                            <span class="x-red">*</span>地块名字</label>
+                        <label for="telephone" class="layui-form-label">
+                            <span class="x-red">*</span>电话号码</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="field_name" name="field_name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="number" id="telephone" name="telephone" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="field_pos" class="layui-form-label">
-                            <span class="x-red">*</span>地块位置</label>
+                        <label for="birthday" class="layui-form-label">
+                            <span class="x-red">*</span>生日</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="field_pos" name="field_pos" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="datetime" id="birthday" name="birthday" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="size" class="layui-form-label">
-                            <span class="x-red">*</span>地块大小</label>
+                        <label for="work_experience" class="layui-form-label">
+                            <span class="x-red">*</span>工作经历</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="size" name="size" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="field_class" class="layui-form-label">
-                            <span class="x-red">*</span>地块类型</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="field_class" name="field_class" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="field_outcome" class="layui-form-label">
-                            <span class="x-red">*</span>地块产出</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="field_outcome" name="field_outcome" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="work_experience" name="work_experience" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
 
         <div class="layui-form-item">
             <label for="change" class="layui-form-label"></label>
-            <button class="layui-btn" id="change" lay-filter="add" lay-submit="">提交</button></div>
+            <button class="layui-btn" id="change" lay-filter="add" lay-submit="">修改</button></div>
+        <div class="layui-card-header">
+            <button class="layui-btn" onclick="xadmin.open('修改密码','./password_change.html?user_id=' + {{user_id}},800,600)">
+                <i class="layui-icon"></i>修改密码</button></div>
         </form>
         </div>
         </div>
@@ -68,43 +59,41 @@
             document.addEventListener('DOMContentLoaded', function() {
             // 解析URL查询参数
             var urlParams = new URLSearchParams(window.location.search);
-            var fieldId = {{field_id}}
-
+            var userId = {{user_id}};
             // 如果field_id存在，则发起请求获取数据
-            if (fieldId) {
-                fetch('./field_list?field_class=' + fieldId)
+            if (userId) {
+                console.log('DOMContentLoaded 事件已触发');
+                fetch('./product_storage_list?user_id=' + userId)
                 .then(function(response) {
-                    return response.json().field_list[0];
+                    return response.json();
                 })
                 .then(function(data) {
+                    data = data.product_storage_list[0];
                     // 填充表单
-                    document.getElementById('field_id').value = data.field_id || '';
-                    document.getElementById('field_name').value = data.field_name || '';
-                    document.getElementById('field_pos').value = data.field_pos || '';
-                    document.getElementById('size').value = data.field_size || '';
-                    document.getElementById('field_class').value = data.field_class || '';
-                    document.getElementById('field_outcome').value = data.field_outcome || '';
+                    document.getElementById('real_name').value = data.real_name || '';
+                    document.getElementById('telephone').value = data.telephone || '';
+                    document.getElementById('birthday').value = data.birthday || '';
+                    document.getElementById('work_experience').value = data.work_experience || '';
                 })
                 .catch(function(error) {
                     layer.msg('获取目标数据失败', {icon: 5});
                 });
             }
 
-            // 绑定提交按钮的点击事件
+            // 绑定修改按钮的点击事件
             document.getElementById('change').addEventListener('click', function(event) {
                 event.preventDefault(); // 阻止表单默认提交行为
+                var userId = {{user_id}};
                 // 收集表单数据
                 var formData = {
-                    field_id: document.getElementById('field_id').value,
-                    field_name: document.getElementById('field_name').value,
-                    field_pos: document.getElementById('field_pos').value,
-                    field_size: document.getElementById('size').value,
-                    field_class: document.getElementById('field_class').value,
-                    field_outcome: document.getElementById('field_outcome').value
+                    real_name: document.getElementById('real_name').value,
+                    telephone: document.getElementById('telephone').value,
+                    birthday: document.getElementById('birthday').value,
+                    work_experience: document.getElementById('work_experience').value
                 };
 
                 // 发送数据到后端进行更新
-                fetch('./change_field', {
+                fetch('./change_product_storage', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -128,6 +117,15 @@
                 });
             });
         });
+        </script>
+        <script>
+            layui.use(['form', 'layer'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+            });
         </script>
         <script>var _hmt = _hmt || []; (function() {
                 var hm = document.createElement("script");

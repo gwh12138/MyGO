@@ -1,6 +1,6 @@
 __all__ = (
     'account',
     'config',
-    'emplyee_info',
+    'employee_info.py',
     'secure',
 )
