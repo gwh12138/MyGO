@@ -8,9 +8,22 @@ from api_product_storage import *
 from api_goods import *
 from api_sale import *
 
+
 @app.route("/")
 def index():
     return flask.render_template('./login.html')
+
+
+@app.route("/index.html")
+def index_html():
+    user_name = request.args.get('user_name')
+    return flask.render_template('./index.html', user_name=user_name)
+
+
+@app.route("/user_info.html")
+def user_info_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./user_info.html', user_id=user_id)
 
 
 @app.route("/customer.html")
@@ -24,6 +37,7 @@ def customer_buy_html():
     user_id = request.args.get('user_id')
     product_id = request.args.get('product_id')
     return flask.render_template('./customer_buy.html', user_id=user_id, product_id=product_id)
+
 
 @app.route("/field_add.html")
 def field_add_html():
@@ -45,17 +59,21 @@ def product_add_html():
 def field_html():
     return flask.render_template('./field.html')
 
+
 @app.route("/storage.html")
 def storage_html():
     return flask.render_template('./storage.html')
+
 
 @app.route("/goods.html")
 def goods_html():
     return flask.render_template('./goods.html')
 
+
 @app.route("/product.html")
 def product_html():
     return flask.render_template('./product.html')
+
 
 @app.route("/product_change.html")
 def product_change_html():

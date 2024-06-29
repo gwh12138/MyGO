@@ -171,12 +171,13 @@
         <!-- 中部结束 -->
         <script>
             document.addEventListener('DOMContentLoaded',function(){
-                var role = {{role}};
+
+                var role = {{ role }};
                 if(role === "admin" || role === "hr"){
-                    document.getElementById("member").style.display = "block";
+                    document.getElementById("employee").style.display = "block";
                 }
                 else{
-                    document.getElementById("member").style.display = "none";
+                    document.getElementById("employee").style.display = "none";
                 }
                 if(role === "admin" || role === "plant" || role === "harvest"){
                     document.getElementById("crop").style.display = "block";
