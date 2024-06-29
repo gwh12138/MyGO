@@ -130,3 +130,30 @@ def search_employee_info(user_id=None, user_name=None, sex=None, telephone=None,
         return None
     finally:
         close_db_connection(db)
+
+
+def add_employee_info_batch(employee_info_list: list) -> int or None:
+    """
+    Add a batch of employee info
+    :param employee_info_list: [(user_id, real_name, sex, telephone, birthday, work_experience, profile), ...]
+    :return: 1 全部添加成功 0 添加失败 None 出错
+    """
+    db = None
+    result = []
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        sql = ("INSERT INTO employee_info (user_id, real_name,sex,telephone,birthday,work_experience,profile) VALUES ("
+               "%s, %s, %s, %s, %s, %s, %s)")
+        cursor.executemany(sql, employee_info_list)
+        db.commit()
+        if cursor.rowcount != len(employee_info_list):
+            return 0
+        return 1
+    except pymysql.Error as e:
+        print('Error: ', e)
+        return None
+    finally:
+        close_db_connection(db)
+
+

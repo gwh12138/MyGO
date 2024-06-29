@@ -135,7 +135,7 @@ def search_account(user_id=None, user_name=None, password=None, permission=None)
 def add_account_batch(account_list: list) -> list or None:
     """
     Add multiple accounts
-    :param account_list: [(user_name, password, role), ...]
+    :param account_list: [(user_naem, password, role), ...]
     :return: [user_id, ...]
     """
     db = None
