@@ -512,7 +512,7 @@ return binl2rstr(binlMD5(rstr2binl(s), s.length * 8))
 }
 
 /*
-* Calculate the HMAC-MD5, of a key and some data (raw strings)
+* Calculate the HMAC-MD5, of a SECRET_KEY and some data (raw strings)
 */
 function rstrHMACMD5 (key, data) {
 var i

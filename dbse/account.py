@@ -71,7 +71,7 @@ def change_account(user_id, user_name=None, password=None, permission=None) -> b
     try:
         db = get_db_connection()
         cursor = db.cursor()
-
+        password = PasswordSecure.encryption(password)
         params = {'user_name': user_name, 'password': password, 'permission': permission}
 
         update_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
