@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>欢迎页面-X-admin2.2</title>
+        <title>欢迎页面-MyGO2.0</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -39,11 +39,11 @@
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="经度" name="longitude" id="longitude" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤含氮值" name="N" id="N" type="number"></div>
+                                    <input class="layui-input" placeholder="土壤含氮" name="N" id="N" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤含磷值" name="P" id="P" type="number"></div>
+                                    <input class="layui-input" placeholder="土壤含磷" name="P" id="P" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="土壤含钾值" name="K" id="K" type="number"></div>
+                                    <input class="layui-input" placeholder="土壤含钾" name="K" id="K" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="土壤pH值" name="pH" id="pH" type="number"></div>
                             
@@ -154,7 +154,7 @@
         window.member_del = function(obj, field_id, user_id, role) {
             layer.confirm('确认要删除吗？', function(index) {
                 // 发送删除请求
-                fetch('./del_field?field_id=' + id  + '&user_id=' + user_id + '&role=' + role)
+                fetch('./del_field?field_id=' + field_id  + '&user_id=' + user_id + '&role=' + role)
                 .then(function(response) {
                     return response.json();
                 })
