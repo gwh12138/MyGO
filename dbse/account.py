@@ -11,7 +11,6 @@ def add_account(user_name, password, role) -> int or None:
     :return: user_id 添加成功 0 添加失败 None 出错
     """
     db = None
-    result = 0
     try:
         db = get_db_connection()
         cursor = db.cursor()
@@ -43,7 +42,7 @@ def del_account(user_id, password) -> bool or None:
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        if (password is not None):
+        if password is not None:
             password = PasswordSecure.encryption(password)
         sql = "DELETE FROM account WHERE user_id = %s AND password = %s"
         cursor.execute(sql, (user_id, password))
@@ -58,22 +57,22 @@ def del_account(user_id, password) -> bool or None:
         close_db_connection(db)
 
 
-def change_account(user_id, user_name=None, password=None, permission=None) -> bool or None:
+def change_account(user_id, user_name=None, password=None, role=None) -> bool or None:
     """
     Change account information
     :param user_id:
     :param user_name:
     :param password:
-    :param permission:
+    :param role:
     :return: True 修改成功 False 修改失败 None 出错
     """
     db = None
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        if (password is not None):
+        if password is not None:
             password = PasswordSecure.encryption(password)
-        params = {'user_name': user_name, 'password': password, 'permission': permission}
+        params = {'user_name': user_name, 'password': password, 'role': role}
 
         update_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
         if update_parts:
@@ -93,22 +92,19 @@ def change_account(user_id, user_name=None, password=None, permission=None) -> b
         close_db_connection(db)
 
 
-def search_account(user_id=None, user_name=None, password=None, permission=None) -> list or None:
+def search_account(user_id=None, user_name=None, role=None) -> list or None:
     """
     Search account
     :param user_id:
     :param user_name:
-    :param password:
-    :param permission:
-    :return: [(user_id, user_name, password, permission), ...]
+    :param role:
+    :return: [(user_id, user_name, password, role), ...]
     """
     db = None
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        if (password is not None):
-            password = PasswordSecure.encryption(password)
-        params = {'user_id': user_id, 'user_name': user_name, 'password': password, 'permission': permission}
+        params = {'user_id': user_id, 'user_name': user_name, 'role': role}
 
         query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
         if query_parts:
@@ -135,11 +131,10 @@ def search_account(user_id=None, user_name=None, password=None, permission=None)
 def add_account_batch(account_list: list) -> list or None:
     """
     Add multiple accounts
-    :param account_list: [(user_naem, password, role), ...]
+    :param account_list: [(user_name, password, role), ...]
     :return: [user_id, ...]
     """
     db = None
-    result = []
     try:
         db = get_db_connection()
         cursor = db.cursor()
@@ -158,3 +153,10 @@ def add_account_batch(account_list: list) -> list or None:
         return None
     finally:
         close_db_connection(db)
+
+
+if __name__ == '__main__':
+    # print(del_account(2, 'test'))
+    # print(change_account(10, 'hdo', 'test', 'user'))
+    print(search_account(role= 'user'))
+    # print(add_account_batch([('test1', 'test1', 'user'), ('test2', 'test2', 'user')]))
