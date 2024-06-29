@@ -73,10 +73,10 @@ def change_plant_info(field_id, crop_id, plant_date=None, crop_state=None, size=
         cursor = db.cursor()
         params = {"plant_date": plant_date, "crop_state":crop_state, "size": size, "longitude": longitude, "latitude": latitude}
 
-        quary_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
 
-        if quary_parts:
-            sql = f"UPDATE plant_info SET {','.join(quary_parts)} WHERE field_id = %s AND crop_id = %s"
+        if query_parts:
+            sql = f"UPDATE plant_info SET {','.join(query_parts)} WHERE field_id = %s AND crop_id = %s"
             cursor.execute(sql, [value for key, value in params.items() if value is not None] + [field_id, crop_id])
             db.commit()
             if cursor.rowcount == 0:
@@ -100,7 +100,7 @@ def search_plant_info(field_id=None, crop_id=None, plant_date=None, crop_state=N
     :param size:
     :param longitude:
     :param latitude:
-    :return: list 查询成功 None 出错
+    :return: [(crop_id, field_id, crop_name, field_name, plant_date, crop_state, size, longitude, latitude
     """
     db = None
     try:
@@ -108,12 +108,20 @@ def search_plant_info(field_id=None, crop_id=None, plant_date=None, crop_state=N
         cursor = db.cursor()
         params = {"field_id": field_id, "crop_id": crop_id, "plant_date": plant_date, "crop_state":crop_state,
                   "size": size, "longitude": longitude, "latitude": latitude}
-        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        query_parts = [f"plant_info.{key} = %s" for key, value in params.items() if value is not None]
         if query_parts:
-            sql = "SELECT * FROM plant_info WHERE " + " AND ".join(query_parts)
+            sql = ("SELECT plant_info.crop_id, plant_info.field_id, crop.crop_name, field.field_name, "
+                   "plant_info.plant_date, plant_info.crop_state, plant_info.size, plant_info.longitude, plant_info.latitude "
+                   "FROM plant_info "
+                   "INNER JOIN crop ON plant_info.crop_id = crop.crop_id "
+                   "INNER JOIN field ON plant_info.field_id = field.field_id WHERE " + " AND ".join(query_parts))
             cursor.execute(sql, [value for key, value in params.items() if value is not None])
         else:
-            sql = "SELECT * FROM plant_info"
+            sql = ("SELECT plant_info.crop_id, plant_info.field_id, crop.crop_name, field.field_name, "
+                   "plant_info.plant_date, plant_info.crop_state, plant_info.size, plant_info.longitude, plant_info.latitude "
+                   "FROM plant_info "
+                   "INNER JOIN crop ON plant_info.crop_id = crop.crop_id "
+                   "INNER JOIN field ON plant_info.field_id = field.field_id")
             cursor.execute(sql)
         return cursor.fetchall()
     except pymysql.Error as e:
