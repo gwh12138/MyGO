@@ -360,14 +360,7 @@
             window.location.href = "/index.html?user_id="+ user_id + '&role=' + role;
             return response.text();
         } else {
-            alert(response.response);
-        }
-    })
-    .then(function(message) {
-        if (message.length < 30) {
-            alert(message);
-        } else {
-            document.documentElement.innerHTML = message; // 假设message是一个URL
+            alert(response.response.text);
         }
     })
     .catch(function(error) {

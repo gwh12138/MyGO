@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>MyGO</title>
+        <title>欢迎页面-MyGO2.0</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -17,7 +17,7 @@
         <div class="x-nav">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
-                <a href="">用户管理</a>
+                <a href="">职工管理</a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
                 <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
@@ -27,6 +27,31 @@
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input class="layui-input" placeholder="职工姓名" name="real_name" id="real_name"></div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input class="layui-input" placeholder="性别" name="sex" id="sex"></div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input class="layui-input" placeholder="电话号码" name="telephone" id="telephone"></div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input class="layui-input" placeholder="生日" name="birthday" id="birthday" type="date"></div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input class="layui-input" placeholder="工作经历" name="work_experience" id="work_experience"></div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input class="layui-input" placeholder="职能" name="role" id="role"></div>
+
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="search" id="search">
+                                    <i class="layui-icon">&#xe615;</i></button>
+                            </div>
+                        </div>
+                        <div class="layui-card-header">
+                            <span class="layui-elem-quote">
+                                上传csv文件
+                            </span>
+                            <input type="file" id="csvFile" accept=".csv">
+                            <button class="layui-btn" onclick="uploadFile()">上传</button>
                         <div class="layui-card-body">
                             <table id="jsonTable" lay-filter="jsonTableFilter"></table>
                         </div>
@@ -53,29 +78,77 @@
 
         // 初始化表格
         function initTable(data) {
-            table.render({
-                elem: '#jsonTable',
-                cols: [[ // 标题栏
-                    {field: 'real_name', title: '职工姓名', width: 120, sort: true},
-                    {field: 'telephone', title: '电话号码', width: 120, sort: true},
-                    {field: 'birthday', title: '生日', width: 120, sort: true},
-                    {field: 'role', title: '角色', width: 180},
+            var role = {{role}};
+            var user_id = {{user_id}};
+            var cols = [
+                {field: 'user_name', title: '职工姓名', width: 120},
+                {field: 'sex', title: '性别', width: 180, sort: true},
+                {field: 'telephone', title: '电话号码', width: 180, sort: true},
+                {field: 'birthday', title: '生日', width: 180, sort: true},
+                {field: 'work_experience', title: '工作经历', width: 180, sort: true},
+                {field: 'role', title: '职能', width: 180, sort: true},
+            ];
+            if(role === "admin" || role === "hr"){
+                cols.push(
+                    {title: '修改', width: 180, templet: function(d){
+                        return '<div class="td-manage">' +
+                               '<a title="修改" onclick="member_change(this,\'' + d.user_id + '\',\'' + role + '\')" href="javascript:;">' +
+                               '<i class="layui-icon">&#xe63c;</i></a>' +
+                               '</div>';
+                    }},
                     {title: '删除', width: 180, templet: function(d){
                         return '<div class="td-manage">' +
-                               '<a title="删除" onclick="member_del(this,\'' + d.user_id + '\')" href="javascript:;">' +
+                               '<a title="删除" onclick="member_del(this,\'' + d.user_id + '\',\'' + role + '\')" href="javascript:;">' +
                                '<i class="layui-icon">&#xe640;</i></a>' +
                                '</div>';
                     }}
-                ]],
+                );
+            }
+
+
+            table.render({
+                elem: '#jsonTable',
+                cols: [[cols]],
                 data: data, // 数据接口
                 page: true // 开启分页
             });
         }
 
-        window.member_del = function(obj, user_id) {
+        window.member_change = function(obj, user_id, role) {
+            // 打开新的网页，传递ID参数
+            var index = xadmin.open('修改职工信息','./user_change.html?user_id=' + user_id + '&role=' + role);
+
+            index.addEventListener('unload', function(){
+                // 刷新表格
+                fetch('./field_list')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonData) {
+                    initTable(jsonData.field_list); // 展示数据
+                })
+                .catch(function(error) {
+                    layer.msg('数据加载失败', {icon: 5});
+                });
+                console.log('弹窗已关闭');
+            });
+        }
+
+        // 删除成员
+        window.member_del = function(obj, user_id, role) {
             layer.confirm('确认要删除吗？', function(index) {
+                var queryParams = {
+                    user_id: user_id,
+                    role: role,
+                };
                 // 发送删除请求
-                fetch('./del_account?user_id=' + user_id)
+                fetch('./del_field',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(queryParams)
+                })
                 .then(function(response) {
                     return response.json();
                 })
@@ -85,12 +158,12 @@
                         // 删除成功
                         layer.msg('已删除!', {icon: 1});
                         // 刷新表格
-                        fetch('./account_list')
+                        fetch('./field_list')
                         .then(function(response) {
                             return response.json();
                         })
                         .then(function(jsonData) {
-                            initTable(jsonData.account_list); // 展示数据
+                            initTable(jsonData.field_list); // 展示数据
                         })
                         .catch(function(error) {
                             layer.msg('数据加载失败', {icon: 5});
@@ -107,34 +180,47 @@
             });
         }
 
-
         // 页面加载完毕自动获取全部数据
-        fetch('./account_list')
+        fetch('./field_list')
         .then(function(response) {
             return response.json();
         })
         .then(function(jsonData) {
-            initTable(jsonData.account_list); // 展示数据
+            initTable(jsonData.field_list); // 展示数据
         })
         .catch(function(error) {
             layer.msg('数据加载失败', {icon: 5});
         });
 
+        document.addEventListener('DOMContentLoaded', function(){
+            var role = {{role}};
+
+            if(role === 'admin' || role === 'field'){
+                document.getElementById("add").style.display = 'block';
+            }
+            else{
+                document.getElementById("add").style.display = 'none';
+            }
+        })
+
         // 绑定搜索按钮的点击事件
         document.getElementById('search').addEventListener('click', function() {
-            var productId = document.getElementById('product_id').value;
-            var goodsPrice = document.getElementById('goods_price').value;
-            var productQuantity = document.getElementById('product_quantity').value;
-            var goodsState = document.getElementById('goods_state').value;
 
-            if (!productId && !goodsPrice && !productQuantity && !goodsState) {
+            var user_name = document.getElementById('user_name').value;
+            var sex = document.getElementById('sex').value;
+            var telephone = document.getElementById('telephone').value;
+            var birthday = document.getElementById('birthday').value;
+            var work_experience = document.getElementById('work_experience').value;
+            var role = document.getElementById('role').value;
+
+            if (!user_name && !sex && !telephone && !birthday && !work_experience && !role) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
-                fetch('./account_list')
+                fetch('./field_list')
                 .then(function(response) {
                     return response.json();
                 })
                 .then(function(jsonData) {
-                    initTable(jsonData.account_list); // 展示数据
+                    initTable(jsonData.field_list); // 展示数据
                 })
                 .catch(function(error) {
                     layer.msg('数据加载失败', {icon: 5});
@@ -143,20 +229,28 @@
             }
 
             // 构建查询参数
-            var queryParams = new URLSearchParams({
-                product_id: productId,
-                goods_price: goodsPrice,
-                product_quantity: productQuantity,
-                goods_state: goodsState
-            });
+            var queryParams = {
+                user_name: user_name,
+                sex: sex,
+                telephone: telephone,
+                birthday: birthday,
+                work_experience: work_experience,
+                role: role,
+            };
 
             // 发送带查询参数的请求
-            fetch('./account_list?' + queryParams.toString())
+            fetch('./field_list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(queryParams)
+            })
             .then(function(response) {
                 return response.json();
             })
             .then(function(jsonData) {
-                initTable(jsonData.account_list); // 使用搜索结果更新表格
+                initTable(jsonData.field_list); // 使用搜索结果更新表格
             })
             .catch(function(error) {
                 layer.msg('搜索失败', {icon: 5});
