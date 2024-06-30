@@ -62,8 +62,6 @@
                         <dd>
                             <a onclick="xadmin.open('修改密码','./password_change.html?user_id=' + '{{user_id}}')">修改密码</a></dd>
                         <dd>
-                            <a onclick="xadmin.open('切换帐号','./login.html')">切换帐号</a></dd>
-                        <dd>
                             <a href="./login.html">退出</a></dd>
                     </dl>
                 </li>
@@ -175,10 +173,10 @@
             document.addEventListener('DOMContentLoaded',function(){
                 var role = '{{role}}';
                 if(role === "admin" || role === "hr"){
-                    document.getElementById("member").style.display = "block";
+                    document.getElementById("employee").style.display = "block";
                 }
                 else{
-                    document.getElementById("member").style.display = "none";
+                    document.getElementById("employee").style.display = "none";
                 }
                 if(role === "admin" || role === "plant" || role === "harvest"){
                     document.getElementById("crop").style.display = "block";

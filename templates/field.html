@@ -131,7 +131,7 @@
 
             index.addEventListener('unload', function(){
                 // 刷新表格
-                fetch('./field_list')
+                fetch('./search_field')
                 .then(function(response) {
                     return response.json();
                 })
@@ -151,7 +151,7 @@
 
             index.addEventListener('unload', function(){
                 // 刷新表格
-                fetch('./field_list')
+                fetch('./search_field')
                 .then(function(response) {
                     return response.json();
                 })
@@ -190,7 +190,7 @@
                         // 删除成功
                         layer.msg('已删除!', {icon: 1});
                         // 刷新表格
-                        fetch('./field_list')
+                        fetch('./search_field')
                         .then(function(response) {
                             return response.json();
                         })
@@ -213,7 +213,7 @@
         }
 
         // 页面加载完毕自动获取全部数据
-        fetch('./field_list')
+        fetch('./search_field')
         .then(function(response) {
             return response.json();
         })
@@ -250,7 +250,7 @@
 
             if (!field_name && !size && !crop_class && !latitude && !longitude && !N && !P && !K && !pH) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
-                fetch('./field_list')
+                fetch('./search_field')
                 .then(function(response) {
                     return response.json();
                 })
@@ -277,7 +277,7 @@
             };
 
             // 发送带查询参数的请求
-            fetch('./field_list', {
+            fetch('./search_field', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
