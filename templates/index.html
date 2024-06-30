@@ -54,11 +54,13 @@
             </ul>
             <ul class="layui-nav right" lay-filter="">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">admin</a>
+                    <a href="javascript:;">{{user_name}}</a>
                     <dl class="layui-nav-child">
                         <!-- 二级菜单 -->
                         <dd>
-                            <a onclick="xadmin.open('个人信息','./user_info.html?user_id=' + {{user_id}})">个人信息</a></dd>
+                            <a onclick="xadmin.open('个人信息','./user_info.html?user_id=' + '{{user_id}}')">个人信息</a></dd>
+                        <dd>
+                            <a onclick="xadmin.open('修改密码','./password_change.html?user_id=' + '{{user_id}}')">修改密码</a></dd>
                         <dd>
                             <a onclick="xadmin.open('切换帐号','./login.html')">切换帐号</a></dd>
                         <dd>
@@ -82,7 +84,7 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('职工管理','employee.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
+                                <a onclick="xadmin.add_tab('职工管理','employee.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>职工管理</cite></a>
                             </li>
@@ -95,7 +97,7 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('作物管理','crop.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
+                                <a onclick="xadmin.add_tab('作物管理','crop.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>作物管理</cite></a>
                             </li>
@@ -108,7 +110,7 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('种植管理','plant.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
+                                <a onclick="xadmin.add_tab('种植管理','plant.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>种植管理</cite></a>
                             </li>
@@ -121,7 +123,7 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('农田管理','field.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
+                                <a onclick="xadmin.add_tab('农田管理','field.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>农田管理</cite></a>
                             </li>
@@ -134,7 +136,7 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('收获管理','harvest.html?user_id=' + {{user_id}} + '&role=' + {{role}})">
+                                <a onclick="xadmin.add_tab('收获管理','harvest.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>收获管理</cite></a>
                             </li>
@@ -171,7 +173,7 @@
         <!-- 中部结束 -->
         <script>
             document.addEventListener('DOMContentLoaded',function(){
-                var role = {{role}};
+                var role = '{{role}}';
                 if(role === "admin" || role === "hr"){
                     document.getElementById("member").style.display = "block";
                 }
@@ -203,7 +205,7 @@
                     document.getElementById("harvest").style.display = "none";
                 }
 
-                var user_id = {{user_id}};
+                var user_id = '{{user_id}}';
 
                 var iframe = document.querySelector('.x-iframe');
                 switch(role){

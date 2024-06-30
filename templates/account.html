@@ -78,8 +78,8 @@
 
         // 初始化表格
         function initTable(data) {
-            var role = {{role}};
-            var user_id = {{user_id}};
+            var role = '{{role}}';
+            var user_id = '{{user_id}}';
             var cols = [
                 {field: 'user_name', title: '职工姓名', width: 120},
                 {field: 'sex', title: '性别', width: 180, sort: true},
@@ -193,7 +193,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', function(){
-            var role = {{role}};
+            var role = '{{role}}';
 
             if(role === 'admin' || role === 'field'){
                 document.getElementById("add").style.display = 'block';

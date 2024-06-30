@@ -63,7 +63,7 @@
             // 解析URL查询参数
             var urlParams = new URLSearchParams(window.location.search);
             var queryParams = {
-                crop_id: {{crop_id}}
+                crop_id: '{{crop_id}}'
             };
 
             console.log('DOMContentLoaded 事件已触发');
@@ -94,7 +94,7 @@
             document.getElementById('change').addEventListener('click', function(event) {
                 event.preventDefault(); // 阻止表单默认提交行为
                 // 收集表单数据
-                var cropId = {{crop_id}};
+                var cropId = '{{crop_id}}';
                 var formData = {
                     user_id: user_id,
                     role: role,

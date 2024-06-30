@@ -99,7 +99,7 @@
             var urlParams = new URLSearchParams(window.location.search);
 
             var queryParams = {
-                field_id: {{field_id}}
+                field_id: '{{field_id}}'
             };
 
             console.log('DOMContentLoaded 事件已触发');
@@ -134,10 +134,10 @@
             document.getElementById('change').addEventListener('click', function(event) {
                 event.preventDefault(); // 阻止表单默认提交行为
                 // 收集表单数据
-                var fieldId = {{field_id}};
+                var fieldId = '{{field_id}}';
                 var formData = {
-                    user_id: {{user_id}},
-                    role: {{role}},
+                    user_id: '{{user_id}}',
+                    role: '{{role}}',
                     field_id: fieldId,
                     field_name: document.getElementById('field_name').value,
                     size: document.getElementById('size').value,

@@ -356,7 +356,7 @@
     .then(function(response) {
         if (response.response === "success") {
             var user_id = response.user_id;
-            var role = response = response.role;
+            var role = response.role;
             window.location.href = "/index.html?user_id="+ user_id + '&role=' + role;
             return response.text();
         } else {
