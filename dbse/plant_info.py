@@ -157,10 +157,10 @@ def search_plant_info(field_id=None, crop_id=None, plant_date=None, crop_state=N
         cursor = db.cursor()
         params = {"field_id": field_id, "crop_id": crop_id, "plant_date": plant_date, "crop_state": crop_state,
                   "size": size, "longitude": longitude, "latitude": latitude}
-        query_parts = [f"plant_info.{key} = %s" for key, value in params.items() if value is not None]
+        query_parts = [f"plant_info.{key} = %s" for key, value in params.items() if value is not None and value != '']
         if query_parts:
             sql = "SELECT * FROM plant_info WHERE " + " AND ".join(query_parts)
-            cursor.execute(sql, [value for key, value in params.items() if value is not None])
+            cursor.execute(sql, [value for key, value in params.items() if value is not None and value != ''])
             result = cursor.fetchall()
             if field_id is not None:
                 field_name = get_field_name(field_id)

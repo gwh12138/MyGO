@@ -35,9 +35,13 @@
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="种植作物类型" name="crop_class" id="crop_class"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="纬度" name="latitude" id="latitude" type="number"></div>
+                                    <input class="layui-input" placeholder="纬度" name="latitude" id="latitude" type="number" step="any"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="经度" name="longitude" id="longitude" type="number"></div>
+                                    <input class="layui-input" placeholder="经度" name="longitude" id="longitude" type="number" step="any"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="长度（米）" name="length" id="length" type="number"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="宽度（米）" name="width" id="width" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="土壤含氮(0~0.15)" name="N" id="N" type="number" step="any" oninput="if(value < 0)value = 0;if(value > 0.15)value = 0.15"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
@@ -85,13 +89,15 @@
             var user_id = '{{user_id}}';
             var cols = [
                 {field: 'field_name', title: '农田名字', width: 120},
-                {field: 'size', title: '农田大小', width: 180, sort: true},
-                {field: 'crop_class', title: '种植作物类型', width: 180, sort: true},
-                {field: 'latitude', title: '纬度', width: 180, sort: true},
-                {field: 'longitude', title: '经度', width: 180, sort: true},
+                {field: 'size', title: '农田大小', width: 120, sort: true},
+                {field: 'crop_class', title: '种植作物类型', width: 120, sort: true},
+                {field: 'latitude', title: '纬度', width: 120, sort: true},
+                {field: 'longitude', title: '经度', width: 120, sort: true},
+                {field: 'length', title: '长度（米）', width: 120, sort: true},
+                {field: 'width', title: '宽度（米）', width: 120, sort: true},
                 {title: '详情', width: 180, templet: function(d){
                     return '<div class="td-manage">' +
-                            '<a title="详情" onclick="member_idfo(this,\'' + d.field_id + '\')" href="javascript:;">' +
+                            '<a title="详情" onclick="member_info(this,\'' + d.field_id + '\')" href="javascript:;">' +
                             '<i class="layui-icon">&#xe63c;</i></a>' +
                             '</div>';
                 }}
@@ -116,7 +122,7 @@
 
             table.render({
                 elem: '#jsonTable',
-                cols: [[cols]],
+                cols: [cols],
                 data: data, // 数据接口
                 page: true // 开启分页
             });
@@ -127,21 +133,9 @@
         }
 
         window.member_add = function(){
-            var index = xadmin.open('添加田地','./field_add.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}',800,600);
-
-            index.addEventListener('unload', function(){
-                // 刷新表格
-                fetch('./field_list')
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonData) {
-                    initTable(jsonData.field_list); // 展示数据
-                })
-                .catch(function(error) {
-                    layer.msg('数据加载失败', {icon: 5});
-                });
-                console.log('弹窗已关闭');
+            var index = xadmin.open('添加田地','./field_add.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}',800,600,function (){},function (){
+                location.reload();
+                console.log("事件已触发");
             });
         }
 
@@ -149,19 +143,8 @@
             // 打开新的网页，传递ID参数
             var index = xadmin.open('修改农田','./field_change.html?field_id=' + field_id + '&user_id=' + user_id + '&role=' + role);
 
-            index.addEventListener('unload', function(){
-                // 刷新表格
-                fetch('./field_list')
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonData) {
-                    initTable(jsonData.field_list); // 展示数据
-                })
-                .catch(function(error) {
-                    layer.msg('数据加载失败', {icon: 5});
-                });
-                console.log('弹窗已关闭');
+            xadmin.child_frame_ready(index, function () {
+                location.reload();
             });
         }
 
@@ -190,16 +173,7 @@
                         // 删除成功
                         layer.msg('已删除!', {icon: 1});
                         // 刷新表格
-                        fetch('./field_list')
-                        .then(function(response) {
-                            return response.json();
-                        })
-                        .then(function(jsonData) {
-                            initTable(jsonData.field_list); // 展示数据
-                        })
-                        .catch(function(error) {
-                            layer.msg('数据加载失败', {icon: 5});
-                        });
+                        location.reload();
                     } else {
                         // 删除失败
                         layer.msg('删除失败', {icon: 5});
@@ -213,7 +187,13 @@
         }
 
         // 页面加载完毕自动获取全部数据
-        fetch('./field_list')
+        fetch('./search_field',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+        })
         .then(function(response) {
             return response.json();
         })
@@ -243,23 +223,16 @@
             var crop_class = document.getElementById('crop_class').value;
             var latitude = document.getElementById('latitude').value;
             var longitude = document.getElementById('longitude').value;
+            var length = document.getElementById('length').value;
+            var width = document.getElementById('width').value;
             var N = document.getElementById('N').value;
             var P = document.getElementById('P').value;
             var K = document.getElementById('K').value;
             var pH = document.getElementById('pH').value;
 
-            if (!field_name && !size && !crop_class && !latitude && !longitude && !N && !P && !K && !pH) {
+            if (!field_name && !size && !crop_class && !latitude && !longitude && !N && !P && !K && !pH && !length && !width) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
-                fetch('./field_list')
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonData) {
-                    initTable(jsonData.field_list); // 展示数据
-                })
-                .catch(function(error) {
-                    layer.msg('数据加载失败', {icon: 5});
-                });
+                location.reload();
                 return; // 如果所有数据为空，则不执行后续操作
             }
 
@@ -270,6 +243,8 @@
                 crop_class: crop_class,
                 latitude: latitude,
                 longitude: longitude,
+                length: length,
+                width: width,
                 N: N,
                 P: P,
                 K: K,
@@ -277,7 +252,7 @@
             };
 
             // 发送带查询参数的请求
-            fetch('./field_list', {
+            fetch('./search_field', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

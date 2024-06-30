@@ -1,9 +1,9 @@
-from ..app import app
+from app import app
 from flask import request, jsonify
-from ..dbse import *
+from dbse import *
 
 
-@app.route("/add_crop", methods=["POST"])
+@app.route("/add_field", methods=["POST"])
 def add_field():
     field_name = request.json.get("field_name")
     size = request.json.get("size")
@@ -112,20 +112,24 @@ def search_field():
     pH = request.json.get("pH")
     length = request.json.get("length")
     width = request.json.get("width")
-
     res = field.search_field(field_id, field_name, size, crop_class, latitude, longitude, N, P, K, pH, length, width)
-    resp = [{
-        'field_id': re[0],
-        'field_name': re[1],
-        'size': re[2],
-        'crop_class': re[3],
-        'latitude =': re[4],
-        'longitude': re[5],
-        'N': re[6],
-        'P': re[7],
-        'K': re[8],
-        'pH': re[9],
-        'length': re[10],
-        'width': re[11],
-    } for re in res]
+    if res is None:
+        return jsonify({
+            'response': '500',
+        })
+    resp = {
+        'field_list': [{
+            'field_id': re[0],
+            'field_name': re[1],
+            'size': re[2],
+            'crop_class': re[3],
+            'latitude': re[4],
+            'longitude': re[5],
+            'N': re[6],
+            'P': re[7],
+            'K': re[8],
+            'pH': re[9],
+            'length': re[10],
+            'width': re[11],
+        } for re in res]}
     return jsonify(resp)

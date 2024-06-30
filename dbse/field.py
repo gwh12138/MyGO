@@ -93,13 +93,13 @@ def search_field(field_id=None, field_name=None, size=None, crop_class=None,
                   "latitude": latitude, "longitude": longitude,
                   "N": N, "P": P, "K": K, "pH": pH, "length": length, "width": width}
 
-        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != '']
         if query_parts:
             sql = f"SELECT * FROM field WHERE {' AND '.join(query_parts)}"
-            values = tuple(value for value in params.values() if value is not None)
+            values = tuple(value for value in params.values() if value is not None and value != '')
             cursor.execute(sql, values)
         else:
-            sql = "SELECT * FROM crop"
+            sql = "SELECT * FROM field"
             cursor.execute(sql)
 
         result = cursor.fetchall()

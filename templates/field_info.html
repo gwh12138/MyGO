@@ -52,6 +52,18 @@
                             <span id="longitude" name="longitude"></span></div>
                     </div>
                     <div class="layui-form-item">
+                        <label for="length" class="layui-form-label">
+                            <span class="x-red">*</span>长度（米）</label>
+                        <div class="layui-input-inline">
+                           <span id="length" name="length"></span></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="width" class="layui-form-label">
+                            <span class="x-red">*</span>宽度（米）</label>
+                        <div class="layui-input-inline">
+                            <span id="width" name="width"></span></div>
+                    </div>
+                    <div class="layui-form-item">
                         <label for="N" class="layui-form-label">
                             <span class="x-red">*</span>土壤含氮(0~0.15)</label>
                         <div class="layui-input-inline">
@@ -98,7 +110,7 @@
             };
 
             console.log('DOMContentLoaded 事件已触发');
-            fetch('./field_list?',{
+            fetch('./search_field',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -116,6 +128,8 @@
                 document.getElementById('crop_class').innerText = data.crop_class || '';
                 document.getElementById('latitude').innerText = data.latitude || '';
                 document.getElementById('longitude').innerText = data.longitude || '';
+                document.getElementById('length').value = data.length || '';
+                document.getElementById('width').value = data.width || '';
                 document.getElementById('N').innerText = data.N || '';
                 document.getElementById('P').innerText = data.P || '';
                 document.getElementById('K').innerText = data.K || '';

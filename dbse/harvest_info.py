@@ -103,11 +103,11 @@ def search_harvest_info(field_id=None, crop_id=None, harvest_date=None, harvest_
         cursor = db.cursor()
         params = {"field_id": field_id, "crop_id": crop_id, "harvest_date": harvest_date, "harvest_weight": harvest_weight}
 
-        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != '']
 
         if query_parts:
             sql = "SELECT * FROM harvest_info WHERE " + " AND ".join(query_parts)
-            cursor.execute(sql, [value for key, value in params.items() if value is not None])
+            cursor.execute(sql, [value for key, value in params.items() if value is not None and value != ''])
             result = cursor.fetchall()
             if field_id is not None:
                 field_name = get_field_name(field_id)

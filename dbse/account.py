@@ -74,7 +74,7 @@ def change_account(user_id, user_name=None, password=None, role=None) -> bool or
             password = PasswordSecure.encryption(password)
         params = {'user_name': user_name, 'password': password, 'role': role}
 
-        update_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        update_parts = [f"{key} = %s" for key, value in params.items() if value is not None ]
         if update_parts:
             sql = "UPDATE account SET " + ", ".join(update_parts) + " WHERE user_id = %s"
             values = tuple(value for value in params.values() if value is not None) + (user_id,)
@@ -106,10 +106,10 @@ def search_account(user_id=None, user_name=None, role=None) -> list or None:
         cursor = db.cursor()
         params = {'user_id': user_id, 'user_name': user_name, 'role': role}
 
-        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != '']
         if query_parts:
             sql = "SELECT * FROM account WHERE " + " AND ".join(query_parts)
-            values = tuple(value for value in params.values() if value is not None)
+            values = tuple(value for value in params.values() if value is not None and value != '')
             cursor.execute(sql, values)
         else:
             sql = "SELECT * FROM account"

@@ -110,11 +110,11 @@ def search_crop(crop_id=None, crop_name=None, irrigation = None,crop_class=None,
         params = {'crop_id': crop_id, 'crop_name': crop_name, 'irrigation_per':irrigation,'crop_class': crop_class, 'birth_cycle': birth_cycle,
                   'yield_per': yield_per}
 
-        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        query_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != '']
 
         if query_parts:
             sql = "SELECT * FROM crop WHERE " + " AND ".join(query_parts)
-            values = tuple(value for value in params.values() if value is not None)
+            values = tuple(value for value in params.values() if value is not None and value != '')
             cursor.execute(sql, values)
         else:
             sql = "SELECT * FROM crop"

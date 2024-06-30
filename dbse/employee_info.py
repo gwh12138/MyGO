@@ -117,10 +117,10 @@ def search_employee_info(user_id=None, real_name=None, sex=None, telephone=None,
         cursor = db.cursor()
         params = {'user_id': user_id, 'real_name': real_name, 'sex': sex, 'telephone': telephone,
                   'birthday': birthday, 'work_experience': work_experience, 'profile': profile}
-        select_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        select_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != '']
         if select_parts:
             sql = "SELECT * FROM employee_info WHERE " + " AND ".join(select_parts)
-            values = tuple(value for value in params.values() if value is not None)
+            values = tuple(value for value in params.values() if value is not None and value != '')
             cursor.execute(sql, values)
         else:
             sql = "SELECT * FROM employee_info"

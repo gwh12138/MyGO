@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from app import app
 from backend.login import *
 from backend.account import *
+from backend.field import *
 import dbse
 
 
@@ -34,10 +35,31 @@ def user_info_html():
 def login_html():
     return flask.render_template('./login.html')
 
+
 @app.route("/password_change.html")
 def change_password_html():
     user_id = request.args.get('user_id')
     return flask.render_template('./password_change.html', user_id=user_id)
+
+
+@app.route("/field_add.html")
+def field_add_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./field_add.html', user_id=user_id)
+
+
+@app.route("/field_info.html")
+def field_info_html():
+    field_id = request.args.get('field_id')
+    return flask.render_template('./field_info.html', field_id=field_id)
+
+
+@app.route("/field_change.html")
+def field_change_html():
+    field_id = request.args.get('field_id')
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./field_change.html', field_id=field_id, user_id=user_id, role=role)
 
 
 @app.route("/employee.html")

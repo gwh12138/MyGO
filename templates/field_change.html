@@ -43,13 +43,25 @@
                         <label for="latitude" class="layui-form-label">
                             <span class="x-red">*</span>纬度</label>
                         <div class="layui-input-inline">
-                           <input type="number" id="latitude" name="latitude" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                           <input type="number" step="any" id="latitude" name="latitude" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="longitude" class="layui-form-label">
                             <span class="x-red">*</span>经度</label>
                         <div class="layui-input-inline">
-                            <input type="number" id="longitude" name="longitude" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <input type="number" step="any" id="longitude" name="longitude" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="length" class="layui-form-label">
+                            <span class="x-red">*</span>长度（米）</label>
+                        <div class="layui-input-inline">
+                            <input type="number" id="length" name="length" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="width" class="layui-form-label">
+                            <span class="x-red">*</span>宽度（米）</label>
+                        <div class="layui-input-inline">
+                            <input type="number" id="width" name="width" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="N" class="layui-form-label">
@@ -103,7 +115,7 @@
             };
 
             console.log('DOMContentLoaded 事件已触发');
-            fetch('./field_list',{
+            fetch('./search_field',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,6 +133,8 @@
                 document.getElementById('crop_class').value = data.crop_class;
                 document.getElementById('latitude').value = data.latitude || '';
                 document.getElementById('longitude').value = data.longitude || '';
+                document.getElementById('length').value = data.length || '';
+                document.getElementById('width').value = data.width || '';
                 document.getElementById('N').value = data.N || '';
                 document.getElementById('P').value = data.P || '';
                 document.getElementById('K').value = data.K || '';
@@ -139,6 +153,8 @@
                     user_id: '{{user_id}}',
                     role: '{{role}}',
                     field_id: fieldId,
+                    length: document.getElementById('length').value,
+                    width: document.getElementById('width').value,
                     field_name: document.getElementById('field_name').value,
                     size: document.getElementById('size').value,
                     crop_class: document.getElementById('crop_class').value,
