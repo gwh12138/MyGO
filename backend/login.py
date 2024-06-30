@@ -27,6 +27,7 @@ def login():
         return jsonify({
             'response': 'success',
             'user_id': res[0],
+            'role': res[3],
         })
 
 

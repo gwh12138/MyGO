@@ -88,7 +88,7 @@ def search_account():
     user_name = request.json.get("user_name")
     password = request.json.get("pwd")
     role = request.json.get("role")
-    accounts = account.search_account(user_id, user_name, password, role)
+    accounts = account.search_account(user_id, user_name, role)
     res = [list(acc) + list(employee_info.search_employee_info(acc[0])[0]) for acc in accounts]
     res = [{"user_id": r[0],
             "user_name": r[1],
