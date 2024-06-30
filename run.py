@@ -2,6 +2,7 @@ import flask
 from flask import Flask, render_template, request, redirect, url_for
 from app import app
 from backend.login import *
+from backend.account import *
 import dbse
 
 

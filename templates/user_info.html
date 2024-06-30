@@ -70,7 +70,7 @@
             };
 
             console.log('DOMContentLoaded 事件已触发');
-            fetch('./product_storage_list',{
+            fetch('./search_account',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,7 +107,7 @@
                 };
 
                 // 发送数据到后端进行更新
-                fetch('./change_product_storage', {
+                fetch('./change_account', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

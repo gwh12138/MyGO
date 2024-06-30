@@ -1,4 +1,4 @@
-from connection import *
+from dbse.connection import *
 
 
 def add_crop(crop_name, irrigation_per, crop_class, birth_cycle, yield_per) -> int or None:

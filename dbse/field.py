@@ -1,4 +1,4 @@
-from connection import *
+from dbse.connection import *
 
 
 def add_field(field_name,size,crop_class,
