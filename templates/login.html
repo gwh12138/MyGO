@@ -355,7 +355,9 @@
     })
     .then(function(response) {
         if (response.response === "success") {
-            window.location.href = "/index.html?user_name="+ username_in;
+            var user_id = response.user_id;
+            var role = response = response.role;
+            window.location.href = "/index.html?user_id="+ user_id + '&role=' + role;
             return response.text();
         } else {
             alert(response.response);
