@@ -34,6 +34,11 @@ def user_info_html():
 def login_html():
     return flask.render_template('./login.html')
 
+@app.route("/password_change.html")
+def change_password_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./password_change.html', user_id=user_id)
+
 
 @app.route("/employee.html")
 def employee_html():

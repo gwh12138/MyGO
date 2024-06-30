@@ -55,6 +55,9 @@
         <div class="layui-form-item">
             <label for="change" class="layui-form-label"></label>
             <button class="layui-btn" id="change" lay-filter="add" lay-submit="">修改</button></div>
+        <div class="layui-card-header">
+            <button class="layui-btn" onclick="xadmin.open('修改密码','./password_change.html?user_id=' + {{user_id}},800,600)">
+                <i class="layui-icon"></i>修改密码</button></div>
         </form>
         </div>
         </div>
@@ -63,7 +66,7 @@
             // 解析URL查询参数
             var urlParams = new URLSearchParams(window.location.search);
             var queryParams = {
-                user_id: '{{user_id}}'
+                user_id: {{user_id}}
             };
 
             console.log('DOMContentLoaded 事件已触发');
@@ -95,7 +98,7 @@
                 event.preventDefault(); // 阻止表单默认提交行为
                 // 收集表单数据
                 var formData = {
-                    user_id: '{{user_id}}',
+                    user_id: {{user_id}},
                     real_name: document.getElementById('real_name').value,
                     sex: document.getElementById('sex').value,
                     telephone: document.getElementById('telephone').value,

@@ -20,7 +20,8 @@ def add_employee_info(user_id, real_name=None, sex=None, telephone=None,
         db = get_db_connection()
         cursor = db.cursor()
         sql = (
-            "INSERT INTO employee_info (user_id, real_name, sex, telephone, birthday, work_experience, profile) VALUES ("
+            "INSERT INTO employee_info (user_id, real_name, sex, telephone, birthday, work_experience, "
+            "profile) VALUES ("
             "%s, %s, %s,%s, %s, %s, %s)")
         cursor.execute(sql, (user_id, real_name, sex, telephone, birthday, work_experience, profile))
         db.commit()
@@ -58,12 +59,12 @@ def del_employee_info(user_id) -> bool or None:
         close_db_connection(db)
 
 
-def change_employee_info(user_id=None, user_name=None, sex=None, telephone=None, birthday=None, work_experience=None,
+def change_employee_info(user_id=None, real_name=None, sex=None, telephone=None, birthday=None, work_experience=None,
                          profile=None) -> bool or None:
     """
     Change an employee info
     :param user_id:
-    :param user_name:
+    :param real_name:
     :param sex
     :param telephone:
     :param birthday:
@@ -75,7 +76,7 @@ def change_employee_info(user_id=None, user_name=None, sex=None, telephone=None,
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        params = {'user_name': user_name, 'sex': sex, 'telephone': telephone, 'birthday': birthday,
+        params = {'real_name': real_name, 'sex': sex, 'telephone': telephone, 'birthday': birthday,
                   'work_experience': work_experience, 'profile': profile}
 
         update_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
@@ -97,24 +98,24 @@ def change_employee_info(user_id=None, user_name=None, sex=None, telephone=None,
         close_db_connection(db)
 
 
-def search_employee_info(user_id=None, user_name=None, sex=None, telephone=None, birthday=None, work_experience=None,
+def search_employee_info(user_id=None, real_name=None, sex=None, telephone=None, birthday=None, work_experience=None,
                          profile=None) -> list or None:
     """
     Search employee info
     :param sex:
     :param user_id:
-    :param user_name:
+    :param real_name:
     :param telephone:
     :param birthday:
     :param work_experience:
     :param profile:
-    :return: [(user_id, user_name, sex, telephone, birthday, work_experience, profile), ...]
+    :return: [(user_id, real_name, sex, telephone, birthday, work_experience, profile), ...]
     """
     db = None
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        params = {'user_id': user_id, 'user_name': user_name, 'sex': sex, 'telephone': telephone,
+        params = {'user_id': user_id, 'real_name': real_name, 'sex': sex, 'telephone': telephone,
                   'birthday': birthday, 'work_experience': work_experience, 'profile': profile}
         select_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
         if select_parts:

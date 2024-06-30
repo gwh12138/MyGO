@@ -96,22 +96,29 @@ def change_account():
 def search_account():
     user_id = request.json.get("user_id")
     user_name = request.json.get("user_name")
+    real_name = request.json.get("real_name")
     sex = request.json.get("sex")
     role = request.json.get("role")
-    accounts = account.search_account(user_id, user_name, role)
-    res = [list(acc) + list(employee_info.search_employee_info(acc[0])[0]) for acc in accounts]
-    res = [{"user_id": r[0],
-                          "user_name": r[1],
-                          "pwd": r[2],
-                          "role": r[3],
-                          "real_name": r[4],
-                          "sex": r[5],
-                          "telephone": r[6],
-                          "birthday": r[7],
-                          "work_experience": r[8],
-                          "profile": r[9],
-                          }
-                         for r in res]
+    if sex or real_name:
+        accounts = employee_info.search_employee_info(sex=sex)
+        res = [list(account.search_account(acc[0])[0]) + list(acc[1:]) for acc in accounts]
+    else:
+        accounts = account.search_account(user_id, user_name, role)
+        res = [list(acc) + list(employee_info.search_employee_info(acc[0])[0][1:]) for acc in accounts]
+    res = {
+        "account_list":
+            [{"user_id": r[0],
+              "user_name": r[1],
+              "pwd": r[2],
+              "role": r[3],
+              "real_name": r[4],
+              "sex": r[5],
+              "telephone": r[6],
+              "birthday": r[7],
+              "work_experience": r[8],
+              "profile": r[9],
+              } for r in res]
+    }
     return jsonify(res)
 
 
