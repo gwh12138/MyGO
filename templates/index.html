@@ -204,8 +204,25 @@
                 }
 
                 var user_id = {{user_id}};
+
                 var iframe = document.querySelector('.x-iframe');
-                iframe.src = './welcome.html?user_id='+user_id;
+                switch(role){
+                    case 'admin':
+                        iframe.src = './welcome_admin.html?user_id='+user_id;
+                        break;
+                    case 'hr':
+                        iframe.src = './welcome_hr.html?user_id='+user_id;
+                        break;
+                    case 'field':
+                        iframe.src = './welcome_field.html?user_id='+user_id;
+                        break;
+                    case 'plant':
+                        iframe.src = './welcome_plant.html?user_id='+user_id;
+                        break;
+                    case 'harvest':
+                        iframe.src = './welcome_plant.html?user_id='+user_id;
+                        break;
+                }
             })
         </script>
     </body>
