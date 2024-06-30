@@ -63,8 +63,8 @@
             // 获取表单元素
             var formElement = document.querySelector('.layui-form');
             var formData = new FormData(formElement);
-            formData.append('user_id',{{user_id}});
-            formData.append('role',{{role}});
+            formData.append('user_id','{{user_id}}');
+            formData.append('role','{{role}}');
 
             // 监听表单的提交事件
             formElement.addEventListener('submit', function(event) {

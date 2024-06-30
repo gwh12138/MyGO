@@ -73,8 +73,8 @@
 
         // 初始化表格
         function initTable(data) {
-            var role = {{role}};
-            var user_id = {{user_id}};
+            var role = '{{role}}';
+            var user_id = '{{user_id}}';
             var cols = [
                 {field: 'crop_name', title: '作物名字', width: 120},
                 {field: 'crop_class', title: '作物类型', width: 180, sort: true},
@@ -119,7 +119,7 @@
         }
 
         window.member_add = function(){
-            var index = xadmin.open('添加作物','./crop_add.html?user_id=' + {{user_id}} + '&role=' + {{role}},800,600);
+            var index = xadmin.open('添加作物','./crop_add.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}',800,600);
 
             index.addEventListener('unload', function(){
                 // 刷新表格
@@ -217,7 +217,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', function(){
-            var role = {{role}};
+            var role = '{{role}}';
 
             if(role === 'admin' || role === 'plant'){
                 document.getElementById("add").style.display = 'block';
