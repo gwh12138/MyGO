@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>欢迎页面-X-admin2.2</title>
+        <title>MyGO2.0</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -23,13 +23,13 @@
                 <form class="layui-form">
                     <div class="layui-form-item">
                         <label for="real_name" class="layui-form-label">
-                            <span class="x-red">*</span>用户姓名</label>
+                            <span class="x-red">*</span>职工姓名</label>
                         <div class="layui-input-inline">
                             <input type="text" id="real_name" name="real_name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="real_name" class="layui-form-label">
-                            <span class="x-red">*</span>用户性别</label>
+                        <label for="sex" class="layui-form-label">
+                            <span class="x-red">*</span>性别</label>
                         <div class="layui-input-inline">
                             <input type="text" id="sex" name="sex" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
@@ -37,7 +37,7 @@
                         <label for="telephone" class="layui-form-label">
                             <span class="x-red">*</span>电话号码</label>
                         <div class="layui-input-inline">
-                            <input type="number" id="telephone" name="telephone" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                           <input type="text" id="telephone" name="telephone" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="birthday" class="layui-form-label">
@@ -51,12 +51,18 @@
                         <div class="layui-input-inline">
                             <input type="text" id="work_experience" name="work_experience" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
                     </div>
+                    <div class="layui-form-item">
+                        <label for="role" class="layui-form-label">
+                            <span class="x-red">*</span>职能</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="role" name="role" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
 
-        <div class="layui-form-item">
-            <label for="change" class="layui-form-label"></label>
-            <button class="layui-btn" id="change" lay-filter="add" lay-submit="">修改</button></div>
-        </form>
-        </div>
+                    <div class="layui-form-item">
+                        <label for="change" class="layui-form-label"></label>
+                        <button class="layui-btn" id="change" lay-filter="add" lay-submit="">提交</button></div>
+                </form>
+            </div>
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -78,29 +84,32 @@
                 return response.json();
             })
             .then(function(data) {
-                data = data.product_employee_list[0];
+                data = data.account_list[0];
                 // 填充表单
                 document.getElementById('real_name').value = data.real_name || '';
                 document.getElementById('sex').value = data.sex || '';
                 document.getElementById('telephone').value = data.telephone || '';
                 document.getElementById('birthday').value = data.birthday || '';
                 document.getElementById('work_experience').value = data.work_experience || '';
+                document.getElementById('role').value = data.role || '';
             })
             .catch(function(error) {
                 layer.msg('获取目标数据失败', {icon: 5});
             });
 
-            // 绑定修改按钮的点击事件
+            // 绑定提交按钮的点击事件
             document.getElementById('change').addEventListener('click', function(event) {
                 event.preventDefault(); // 阻止表单默认提交行为
                 // 收集表单数据
                 var formData = {
                     user_id: '{{user_id}}',
+                    role: '{{role}}',
                     real_name: document.getElementById('real_name').value,
                     sex: document.getElementById('sex').value,
                     telephone: document.getElementById('telephone').value,
                     birthday: document.getElementById('birthday').value,
-                    work_experience: document.getElementById('work_experience').value
+                    work_experience: document.getElementById('work_experience').value,
+                    role: document.getElementById('role').value,
                 };
 
                 // 发送数据到后端进行更新
@@ -124,19 +133,10 @@
                     }
                 })
                 .catch(function(error) {
-                    console.error('Error updating field data:', error);
+                    console.error('Error updating crop data:', error);
                 });
             });
         });
-        </script>
-        <script>
-            layui.use(['form', 'layer'],
-            function() {
-                $ = layui.jquery;
-                var form = layui.form,
-                layer = layui.layer;
-
-            });
         </script>
         <script>var _hmt = _hmt || []; (function() {
                 var hm = document.createElement("script");

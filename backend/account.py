@@ -81,7 +81,7 @@ def change_account():
                                      user_name=user_name,
                                      password=password,
                                      role=role)
-        if not res:
+        if res is None:
             return jsonify({
                 'response': 'same name'
             })
@@ -98,13 +98,19 @@ def search_account():
     user_name = request.json.get("user_name")
     real_name = request.json.get("real_name")
     sex = request.json.get("sex")
+    telephone = request.json.get("telephone")
+    birthday = request.json.get("birthday")
     role = request.json.get("role")
-    if sex or real_name:
-        accounts = employee_info.search_employee_info(sex=sex)
-        res = [list(account.search_account(acc[0])[0]) + list(acc[1:]) for acc in accounts]
-    else:
-        accounts = account.search_account(user_id, user_name, role)
-        res = [list(acc) + list(employee_info.search_employee_info(acc[0])[0][1:]) for acc in accounts]
+    accounts = account.search_account(user_id, user_name, role)
+    res = [list(acc) + list(employee_info.search_employee_info(acc[0])[0][1:]) for acc in accounts]
+    if sex or real_name or telephone or birthday:
+        employee = employee_info.search_employee_info(sex=sex,
+                                                      real_name=real_name,
+                                                      telephone=telephone,
+                                                      birthday=birthday)
+        employee = [list(account.search_account(acc[0])[0]) + list(acc[1:]) for acc in employee]
+        res = [acc for acc in employee if acc in res]
+
     res = {
         "account_list":
             [{"user_id": r[0],
@@ -114,7 +120,7 @@ def search_account():
               "real_name": r[4],
               "sex": r[5],
               "telephone": r[6],
-              "birthday": r[7],
+              "birthday": None if r[7] is None else r[7].strftime('%Y-%m-%d'),
               "work_experience": r[8],
               "profile": r[9],
               } for r in res]

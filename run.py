@@ -70,6 +70,13 @@ def employee_html():
     return flask.render_template('./employee.html', user_id=user_id, role=role)
 
 
+@app.route("/employee_change.html")
+def employee_change_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./employee_change.html', user_id=user_id, role=role)
+
+
 @app.route("/crop.html")
 def crop_html():
     user_id = request.args.get('user_id')
