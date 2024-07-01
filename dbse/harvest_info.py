@@ -1,5 +1,4 @@
 from connection import *
-from dbse.plant_info import get_field_name, get_crop_name
 
 
 def add_harvest_info(field_id, crop_id, harvest_date, harvest_weight) -> int or None:
@@ -109,24 +108,11 @@ def search_harvest_info(field_id=None, crop_id=None, harvest_date=None, harvest_
             sql = "SELECT * FROM harvest_info WHERE " + " AND ".join(query_parts)
             cursor.execute(sql, [value for key, value in params.items() if value is not None and value != ''])
             result = cursor.fetchall()
-            if field_id is not None:
-                field_name = get_field_name(field_id)
-            if crop_id is not None:
-                crop_name = get_crop_name(crop_id)
-            result_tmp = []
-            for row in result:
-                row = list(row)
-                if field_name is not None:
-                    row.insert(2, field_name)
-                if crop_name is not None:
-                    row.insert(2, crop_name)
-                result_tmp.append(row)
-            result = result_tmp
+            return result
         else:
             sql = "SELECT * FROM harvest_info"
             result = cursor.execute(sql)
-
-        return result
+            return result
     except pymysql.Error as e:
         print('Error: ', e)
         return None
