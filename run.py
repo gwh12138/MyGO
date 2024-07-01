@@ -5,6 +5,8 @@ from backend.login import *
 from backend.account import *
 from backend.field import *
 from backend.crop import *
+from backend.plant import *
+from backend.harvest import *
 import dbse
 
 
@@ -110,6 +112,20 @@ def plant_html():
     user_id = request.args.get('user_id')
     role = request.args.get('role')
     return flask.render_template('./plant.html', user_id=user_id, role=role)
+
+
+@app.route("/plant_add.html")
+def plant_add_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./plant_add.html', user_id=user_id, role=role)
+
+
+@app.route("/plant_info.html")
+def plant_info_html():
+    crop_id = request.args.get('crop_id')
+    field_id = request.args.get('field_id')
+    return flask.render_template('./plant_info.html', crop_id=crop_id, field_id=field_id)
 
 
 @app.route("/field.html")

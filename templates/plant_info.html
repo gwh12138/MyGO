@@ -24,49 +24,49 @@
                     <div class="layui-form-item">
                         <label for="crop_name" class="layui-form-label">
                             <span class="x-red">*</span>作物名字</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="crop_name" name="crop_name"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="field_name" class="layui-form-label">
                             <span class="x-red">*</span>种植农田</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="field_name" name="field_name"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="size" class="layui-form-label">
                             <span class="x-red">*</span>种植规模（亩）</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                            <span id="size" name="size"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="latitude" class="layui-form-label">
                             <span class="x-red">*</span>纬度</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="latitude" name="latitude"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="longitude" class="layui-form-label">
                             <span class="x-red">*</span>经度</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="longitude" name="longitude"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="plant_date" class="layui-form-label">
                             <span class="x-red">*</span>种植日期</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="plant_date" name="plant_date"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="crop_state" class="layui-form-label">
                             <span class="x-red">*</span>作物状态</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="crop_state" name="crop_state"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="irrigation" class="layui-form-label">
                             <span class="x-red">*</span>浇水量（升）</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="irrigation" name="irrigation"></span></div>
                     </div>
                 </form>
@@ -77,13 +77,13 @@
             // 解析URL查询参数
             var urlParams = new URLSearchParams(window.location.search);
             var queryParams = {
-                crop_id: {{crop_id}},
-                field_id: {{field_id}}
+                crop_id: '{{crop_id}}',
+                field_id: '{{field_id}}'
             };
 
             // 如果crop_id存在，则发起请求获取数据
             console.log('DOMContentLoaded 事件已触发');
-            fetch('./crop_list',{
+            fetch('./search_plant',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,6 +104,7 @@
                 document.getElementById('plant_date').innerText = data.plant_date || '';
                 document.getElementById('crop_state').innerText = data.crop_state || '';
                 document.getElementById('irrigation').innerText = data.irrigation || '';
+                console.log(data.irrigation);
             })
             .catch(function(error) {
                 layer.msg('获取目标数据失败', {icon: 5});

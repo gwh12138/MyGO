@@ -5,4 +5,6 @@ __all__ = (
     'crop',
     'field',
     'secure',
+    'plant_info',
+    'harvest_info',
 )

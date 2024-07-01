@@ -78,8 +78,8 @@
 
         // 初始化表格
         function initTable(data) {
-            var role = {{role}};
-            var user_id = {{user_id}};
+            var role = '{{role}}';
+            var user_id = '{{user_id}}';
             var cols = [
                 {field: 'crop_name', title: '作物名字', width: 120},
                 {field: 'field_name', title: '种植农田', width: 180, sort: true},
@@ -91,7 +91,7 @@
                 {field: 'irrigation', title: '浇水量（升）', width: 180, sort: true},
                 {title: '详情', width: 180, templet: function(d){
                     return '<div class="td-manage">' +
-                            '<a title="详情" onclick="member_idfo(this,\'' + d.crop_id + '\',\'' + d.field_id + '\')" href="javascript:;">' +
+                            '<a title="详情" onclick="member_info(this,\'' + d.crop_id + '\',\'' + d.field_id + '\')" href="javascript:;">' +
                             '<i class="layui-icon">&#xe63c;</i></a>' +
                             '</div>';
                 }}
@@ -100,7 +100,7 @@
                 cols.push(
                     {title: '成熟', width: 180, templet: function(d){
                         return '<div class="td-manage">' +
-                               '<a title="成熟" onclick="member_mature(this,\'' + d.crop_id + '\',\'' + d.field_id + '\',\'' + d.plant_date + '\',\'' + user_id + '\',\'' + role + '\')" href="javascript:;">' +
+                               '<a title="成熟" onclick="member_mature(this,\'' + d.crop_id + '\',\'' + d.field_id + '\',\'' + d.plant_date + '\',\'' + d.crop_state + '\',\'' + user_id + '\',\'' + role + '\')" href="javascript:;">' +
                                '<i class="layui-icon">&#xe63c;</i></a>' +
                                '</div>';
                     }},
@@ -132,7 +132,7 @@
 
             table.render({
                 elem: '#jsonTable',
-                cols: [[cols]],
+                cols: [cols],
                 data: data, // 数据接口
                 page: true // 开启分页
             });
@@ -143,25 +143,10 @@
         }
 
         window.member_add = function(){
-            var index = xadmin.open('添加种植信息','./plant_add.html?user_id=' + {{user_id}} + '&role=' + {{role}},800,600);
-
-            index.addEventListener('unload', function(){
-                // 刷新表格
-                fetch('./plant_list')
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonData) {
-                    initTable(jsonData.plant_list); // 展示数据
-                })
-                .catch(function(error) {
-                    layer.msg('数据加载失败', {icon: 5});
-                });
-                console.log('弹窗已关闭');
-            });
+            var index = xadmin.open('添加种植信息','./plant_add.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}',800,600);
         }
 
-        window.member_mature = function(obj, crop_id, field_id, plant_data, user_id, role) {
+        window.member_mature = function(obj, crop_id, field_id, plant_data, crop_state, user_id, role) {
             // 打开新的网页，传递ID参数
 
             var plantDate = new Date(plant_data);
@@ -169,35 +154,47 @@
 
             var diffTime = Math.abs(currentDate - plantDate);
             var diffDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            // 刷新表格
-            fetch('./plant_list?crop_id=' + crop_id)
+
+
+            var matureParams = {
+                crop_id: crop_id,
+                field_id: field_id,
+                user_id: user_id,
+                role: role,
+                crop_state: '成熟'
+            };
+
+            if(crop_state === '生长')
+            {
+                fetch('./search_crop',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(matureParams)
+                })
                 .then(function(response) {
                     return response.json();
                 })
                 .then(function(jsonData) {
-                    if(jsonData.birth_cycle > diffDay){
+                    if(jsonData.crop_list[0].birth_cycle > diffDay){
                         layer.msg('生长实践少于生长周期', {icon: 5});
                     }
                     else{
-                        fetch('./plant?crop_id=' + crop_id + '&field_id=' + field_id)
+                        fetch('./change_plant',{
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(matureParams)
+                        })
                         .then(function(response){
                             return response.json();
                         })
                         .then(function(data){
                             if(data.response === 'success'){
                                 layer.msg('作物已成熟!', {icon: 1});
-
-                                fetch('./plant_list')
-                                .then(function(response) {
-                                    return response.json();
-                                })
-                                .then(function(jsonData) {
-                                    initTable(jsonData.plant_list); // 展示数据
-                                })
-                                .catch(function(error) {
-                                    layer.msg('数据加载失败', {icon: 5});
-                                });
+                                location.reload();
                             }
                             else{
                                 layer.msg('操作失败', {icon: 5});
@@ -212,6 +209,10 @@
                     layer.msg('数据加载失败', {icon: 5});
                 });
                 console.log('弹窗已关闭');
+            }
+            else{
+                layer.msg('作物已经成熟或已被收获', {icon: 5});
+            }
         }
 
         // 删除成员
@@ -240,16 +241,7 @@
                         // 删除成功
                         layer.msg('已删除!', {icon: 1});
                         // 刷新表格
-                        fetch('./plant_list')
-                        .then(function(response) {
-                            return response.json();
-                        })
-                        .then(function(jsonData) {
-                            initTable(jsonData.plant_list); // 展示数据
-                        })
-                        .catch(function(error) {
-                            layer.msg('数据加载失败', {icon: 5});
-                        });
+                        location.reload();
                     } else {
                         // 删除失败
                         layer.msg('删除失败', {icon: 5});
@@ -262,7 +254,7 @@
             });
         }
 
-        window.member_harvest = function(obj, obj, crop_id, field_id, crop_state, user_id, role){
+        window.member_harvest = function(obj, crop_id, field_id, crop_state, user_id, role){
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -270,25 +262,95 @@
 
             today = yyyy + '-' + mm + '-' + dd;
             
-            if(crop_state === 'mature'){
-                fetch('./harvest')
+            var harvestParams = {
+                crop_id: crop_id,
+                field_id: field_id,
+                user_id: user_id,
+                role: role,
+                harvest_date: today
+            };
+
+            var plantParams = {
+                crop_id: crop_id,
+                field_id: field_id,
+                user_id: user_id,
+                role: role,
+                crop_state: '已收获'
+            };
+
+            if(crop_state === '成熟'){
+                fetch('./add_harvest',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(harvestParams)
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonData) {
+                //返回success
+                    if (jsonData.response === 'success') {
+                        // 删除成功
+                        layer.msg('已收获!', {icon: 1});
+                    } else {
+                        // 删除失败
+                        layer.msg('收获失败', {icon: 5});
+                    }
+                })
+                .catch(function(error) {
+                    layer.msg('请求失败', {icon: 5});
+                });
+
+                fetch('./change_plant',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(plantParams)
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonData) {
+                //返回success
+                    if (jsonData.response === 'success') {
+                        location.reload();
+                    } else {
+                        // 删除失败
+                        layer.msg('修改失败', {icon: 5});
+                    }
+                })
+                .catch(function(error) {
+                    layer.msg('请求失败', {icon: 5});
+                });
+            }
+            else{
+                layer.msg('作物未成熟或者已经收获', {icon: 5});
             }
         }
 
         // 页面加载完毕自动获取全部数据
-        fetch('./crop_list')
+        fetch('./search_plant',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+        })
         .then(function(response) {
             return response.json();
         })
         .then(function(jsonData) {
-            initTable(jsonData.crop_list); // 展示数据
+            initTable(jsonData.plant_list); // 展示数据
         })
         .catch(function(error) {
             layer.msg('数据加载失败', {icon: 5});
         });
 
         document.addEventListener('DOMContentLoaded', function(){
-            var role = {{role}};
+            var role = '{{role}}';
 
             if(role === 'admin' || role === 'plant'){
                 document.getElementById("add").style.display = 'block';
@@ -313,21 +375,12 @@
 
             if (!crop_name && !field_name && !plant_date && !crop_state && !irrigation && !size && !longitude && !latitude) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
-                fetch('./plant_list')
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonData) {
-                    initTable(jsonData.plant_list); // 展示数据
-                })
-                .catch(function(error) {
-                    layer.msg('数据加载失败', {icon: 5});
-                });
+                location.reload();
                 return; // 如果所有数据为空，则不执行后续操作
             }
 
             // 构建查询参数
-            var queryParams = new URLSearchParams({
+            var queryParams = {
                 crop_name: crop_name,
                 field_name: field_name,
                 plant_date: plant_date,
@@ -336,10 +389,10 @@
                 size: size,
                 longitude: longitude,
                 latitude: latitude
-            });
+            };
 
             // 发送带查询参数的请求
-            fetch('./plant_list',{
+            fetch('./search_plant',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -128,8 +128,8 @@
                 document.getElementById('crop_class').innerText = data.crop_class || '';
                 document.getElementById('latitude').innerText = data.latitude || '';
                 document.getElementById('longitude').innerText = data.longitude || '';
-                document.getElementById('length').value = data.length || '';
-                document.getElementById('width').value = data.width || '';
+                document.getElementById('length').innerText = data.length || '';
+                document.getElementById('width').innerText = data.width || '';
                 document.getElementById('N').innerText = data.N || '';
                 document.getElementById('P').innerText = data.P || '';
                 document.getElementById('K').innerText = data.K || '';
@@ -145,7 +145,7 @@
         <script type="text/javascript">
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('main'));
-            
+
             var pH = document.getElementById('pH').innerText;
             var N = document.getElementById('N').innerText;
             var P = document.getElementById('P').innerText;
@@ -187,10 +187,10 @@
                         ]
                         // 其他配置...
                     }
-    
+
                 ]
             };
-    
+
             // 使用刚指定的配置项和数据显示图表。
             myChart.setOption(option);
         </script>

@@ -67,50 +67,61 @@
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
-
-            today = yyyy + '-' + mm + '-' + dd;
-
-            document.getElementById('plant_data_get').innerText = today;
-            document.getElementById('plant_data').value = today;
+                var form = document.querySelector('.layui-form');
             
-            // 获取表单元素
-            var formElement = document.querySelector('.layui-form');
-            var formData = new FormData(formElement);
-            formData.append('user_id',{{user_id}});
-            formData.append('role',{{role}});
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                var yyyy = today.getFullYear();
 
-            // 监听表单的提交事件
-            formElement.addEventListener('submit', function(event) {
-                event.preventDefault(); // 阻止表单默认提交行为
-                // 使用fetch API发送数据
-                fetch('/add_plant', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                })
-                .then(function(response) {
-                    return response.json(); // 解析JSON响应
-                })
-                .then(function(data) {
-                    if (data.response === 'success') {
-                        // 更新成功
-                        layer.msg('数据提交成功', {icon: 1});
-                    } else {
-                        // 更新失败
-                        layer.msg('数据提交失败', {icon: 5});
-                    }
-                })
-                .catch(function(error) {
-                    console.error('Error:', error); // 处理任何在请求过程中发生的错误
+                today = yyyy + '-' + mm + '-' + dd;
+
+                document.getElementById('plant_date_get').innerText = today;
+                document.getElementById('plant_date').value = today;
+        
+
+
+                // 监听表单的提交事件
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); // 阻止表单默认提交行为
+
+                    // 使用FormData对象来获取表单数据
+                    var formData = {
+                        user_id: '{{user_id}}',
+                        role: '{{role}}',
+                        crop_name: document.getElementById('crop_name').value,
+                        field_name: document.getElementById('field_name').value,
+                        plant_date: today,
+                        size: document.getElementById('size').value,
+                        latitude: document.getElementById('latitude').value,
+                        longitude: document.getElementById('longitude').value,
+                    };
+
+                    // 使用fetch API发送数据
+                    fetch('/add_plant', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(function(response) {
+                        return response.json(); // 解析JSON响应
+                    })
+                    .then(function(data) {
+                        if (data.response === 'success') {
+                            // 更新成功
+                            layer.msg('数据提交成功', {icon: 1});
+                        } else {
+                            // 更新失败
+                            layer.msg('数据提交失败', {icon: 5});
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error('Error:', error); // 处理任何在请求过程中发生的错误
+                    });
                 });
             });
-        });
         </script>
         <script>var _hmt = _hmt || []; (function() {
                 var hm = document.createElement("script");

@@ -15,6 +15,7 @@
         <!--[if lt IE 9]>
             <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
             <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+            <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
         <![endif]--></head>
 
     <body>
@@ -139,6 +140,7 @@
                 document.getElementById('P').value = data.P || '';
                 document.getElementById('K').value = data.K || '';
                 document.getElementById('pH').value = data.pH || '';
+                updateChart();
             })
             .catch(function(error) {
                 layer.msg('获取目标数据失败', {icon: 5});
@@ -192,65 +194,66 @@
             });
         });
         </script>
-        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
-        <script type="text/javascript">
+        <script>
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('main'));
             
-            var pH = document.getElementById('pH').value;
-            var N = document.getElementById('N').value;
-            var P = document.getElementById('P').value;
-            var K = document.getElementById('K').value;
-            var option = {
-                title: {
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                },
-                radar: [
-                    // 第一个雷达图配置
-                    {
-                        // 雷达图的指标
-                        indicator: [
-                            { name: '土壤pH值', max: 14 },
-                            { name: '土壤含氮', max: 0.15, min: 0 },
-                            { name: '土壤含磷', max: 0.25, min: 0 },
-                            { name: '土壤含钾', max: 0.35, min: 0 },
-                        ],
-                        // 雷达图中心点位置
-                        center: ['25%', '50%'],
-                        // 雷达图半径
-                        radius: '55%'
-                    }
-                ],
-                series: [
-                    // 第一个雷达图的数据系列
-                    {
-                        type: 'radar',
-                        // 指定当前系列数据对应的雷达图下标
-                        // 数据内容
-                        data: [
-                            {
-                                value: [pH,N,P,K]
-                            }
-                        ]
-                        // 其他配置...
-                    }
-    
-                ]
-            };
-    
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
+            function updateChart(){
+                console.log('updateChart');
+                var pH = document.getElementById('pH').value;
+                var N = document.getElementById('N').value;
+                var P = document.getElementById('P').value;
+                var K = document.getElementById('K').value;
+                var option = {
+                    title: {
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                    },
+                    radar: [
+                        // 第一个雷达图配置
+                        {
+                            // 雷达图的指标
+                            indicator: [
+                                { name: '土壤pH值', max: 14 },
+                                { name: '土壤含氮', max: 0.15, min: 0 },
+                                { name: '土壤含磷', max: 0.25, min: 0 },
+                                { name: '土壤含钾', max: 0.35, min: 0 },
+                            ],
+                            // 雷达图中心点位置
+                            center: ['25%', '50%'],
+                            // 雷达图半径
+                            radius: '55%'
+                        }
+                    ],
+                    series: [
+                        // 第一个雷达图的数据系列
+                        {
+                            type: 'radar',
+                            // 指定当前系列数据对应的雷达图下标
+                            // 数据内容
+                            data: [
+                                {
+                                    value: [pH,N,P,K]
+                                }
+                            ]
+                            // 其他配置...
+                        }
+        
+                    ]
+                };
+                console.log(option);
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+
+            document.getElementById('pH').oninput = updateChart;
+            document.getElementById('N').oninput = updateChart;
+            document.getElementById('P').oninput = updateChart;
+            document.getElementById('K').oninput = updateChart;
         </script>
-        <script>var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
     </body>
 
 </html>

@@ -1,4 +1,4 @@
-from connection import *
+from dbse.connection import *
 
 
 def add_harvest_info(field_id, crop_id, harvest_date, harvest_weight) -> int or None:
@@ -28,7 +28,7 @@ def add_harvest_info(field_id, crop_id, harvest_date, harvest_weight) -> int or 
         close_db_connection(db)
 
 
-def del_harvest_info(crop_id,field_id) -> bool or None:
+def del_harvest_info(field_id,crop_id) -> bool or None:
     """
     Delete a harvest info
     :param crop_id:
@@ -100,7 +100,7 @@ def search_harvest_info(field_id=None, crop_id=None, harvest_date=None, harvest_
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        params = {"field_id": field_id, "crop_id": crop_id, "harvest_date": harvest_date, "harvest_weight": harvest_weight}
+        params = {"field_id": field_id, "crop_id": crop_id, "harvest_date": harvest_date, "yield": harvest_weight}
 
         query_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != '']
 
@@ -111,7 +111,8 @@ def search_harvest_info(field_id=None, crop_id=None, harvest_date=None, harvest_
             return result
         else:
             sql = "SELECT * FROM harvest_info"
-            result = cursor.execute(sql)
+            cursor.execute(sql)
+            result = cursor.fetchall()
             return result
     except pymysql.Error as e:
         print('Error: ', e)

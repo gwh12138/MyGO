@@ -33,7 +33,7 @@
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="种植农田" name="field_name" id="field_name"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="收获总量（千克）" name="yield" id="yield" type="number"></div>
+                                    <input class="layui-input" placeholder="收获总量（千克）" name="harvest_weight" id="harvest_weight" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="收获日期" name="harvest_date" id="harvest_date" type="date"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
@@ -67,12 +67,12 @@
 
         // 初始化表格
         function initTable(data) {
-            var role = {{role}};
-            var user_id = {{user_id}};
+            var role = '{{role}}';
+            var user_id = '{{user_id}}';
             var cols = [
                 {field: 'crop_name', title: '作物名字', width: 120},
                 {field: 'field_name', title: '种植农田', width: 180, sort: true},
-                {field: 'yield', title: '收获总量（千克）', width: 180, sort: true},
+                {field: 'harvest_weight', title: '收获总量（千克）', width: 180, sort: true},
                 {field: 'harvest_date', title: '收获日期', width: 180, sort: true}
             ];
             if(role === "admin" || role === "harvest"){
@@ -89,7 +89,7 @@
 
             table.render({
                 elem: '#jsonTable',
-                cols: [[cols]],
+                cols: [cols],
                 data: data, // 数据接口
                 page: true // 开启分页
             });
@@ -121,16 +121,7 @@
                         // 删除成功
                         layer.msg('已删除!', {icon: 1});
                         // 刷新表格
-                        fetch('./harvest_list')
-                        .then(function(response) {
-                            return response.json();
-                        })
-                        .then(function(jsonData) {
-                            initTable(jsonData.harvest_list); // 展示数据
-                        })
-                        .catch(function(error) {
-                            layer.msg('数据加载失败', {icon: 5});
-                        });
+                        location.reload();
                     } else {
                         // 删除失败
                         layer.msg('删除失败', {icon: 5});
@@ -144,7 +135,13 @@
         }
 
         // 页面加载完毕自动获取全部数据
-        fetch('./harvest_list')
+        fetch('./search_harvest',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+        })
         .then(function(response) {
             return response.json();
         })
@@ -160,34 +157,25 @@
 
             var crop_name = document.getElementById('crop_name').value;
             var field_name = document.getElementById('field_name').value;
-            var yield = document.getElementById('yield').value;
+            var harvest_weight = document.getElementById('harvest_weight').value;
             var harvest_date = document.getElementById('harvest_date').value;
 
-            if (!crop_name && !field_name && !yield && !harvest_date) {
+            if (!crop_name && !field_name && !harvest_weight && !harvest_date) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
-                fetch('./plant_list')
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonData) {
-                    initTable(jsonData.harvest_list); // 展示数据
-                })
-                .catch(function(error) {
-                    layer.msg('数据加载失败', {icon: 5});
-                });
+                location.reload();
                 return; // 如果所有数据为空，则不执行后续操作
             }
 
             // 构建查询参数
-            var queryParams = new URLSearchParams({
+            var queryParams = {
                 crop_name: crop_name,
                 field_name: field_name,
-                yield: yield,
+                harvest_weight: harvest_weight,
                 harvest_date: harvest_date
-            });
+            };
 
             // 发送带查询参数的请求
-            fetch('./plant_list',{
+            fetch('./search_harvest',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
