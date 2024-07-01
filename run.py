@@ -4,6 +4,7 @@ from app import app
 from backend.login import *
 from backend.account import *
 from backend.field import *
+from backend.crop import *
 import dbse
 
 
@@ -74,6 +75,27 @@ def crop_html():
     user_id = request.args.get('user_id')
     role = request.args.get('role')
     return flask.render_template('./crop.html', user_id=user_id, role=role)
+
+
+@app.route("/crop_add.html")
+def crop_add_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./crop_add.html', user_id=user_id, role=role)
+
+
+@app.route("/crop_info.html")
+def crop_info_html():
+    crop_id = request.args.get('crop_id')
+    return flask.render_template('./crop_info.html', crop_id=crop_id)
+
+
+@app.route("/crop_change.html")
+def crop_change_html():
+    crop_id = request.args.get('crop_id')
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./crop_change.html', crop_id=crop_id, user_id=user_id, role=role)
 
 
 @app.route("/plant.html")

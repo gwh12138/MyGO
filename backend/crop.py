@@ -7,13 +7,14 @@ from dbse import *
 def add_crop():
     crop_name = request.json.get("crop_name")
     crop_class = request.json.get("crop_class")
+    irrigation_per = request.json.get("irrigation_per")
     birth_cycle = request.json.get("birth_cycle")
     yield_per = request.json.get("yield_per")
-    if None in (crop_name, crop_class, birth_cycle, yield_per):
+    if None in (crop_name, crop_class, irrigation_per, birth_cycle, yield_per):
         return jsonify({
             'response': 'input none',
         })
-    crop_id = crop.add_crop(crop_name, crop_class, birth_cycle, yield_per)
+    crop_id = crop.add_crop(crop_name, crop_class, irrigation_per, birth_cycle, yield_per)
     if crop_id is None:
         return jsonify({
             'response': '500',
@@ -57,6 +58,7 @@ def change_crop():
     crop_id = request.json.get("crop_id")
     crop_name = request.json.get("crop_name")
     crop_class = request.json.get("crop_class")
+    irrigation_per = request.json.get("irrigation_per")
     birth_cycle = request.json.get("birth_cycle")
     yield_per = request.json.get("yield_per")
     if crop_id is None:
@@ -64,7 +66,7 @@ def change_crop():
             'response': 'crop_id none',
         })
 
-    res = crop.change_crop(crop_id, crop_name, crop_class, birth_cycle, yield_per)
+    res = crop.change_crop(crop_id, crop_name, crop_class, irrigation_per, birth_cycle, yield_per)
     if res is None:
         return jsonify({
             'response': '500',
@@ -84,10 +86,11 @@ def search_crop():
     crop_id = request.json.get("crop_id")
     crop_name = request.json.get("crop_name")
     crop_class = request.json.get("crop_class")
+    irrigation_per = request.json.get("irrigation_per")
     birth_cycle = request.json.get("birth_cycle")
     yield_per = request.json.get("yield_per")
 
-    res = crop.search_crop(crop_id, crop_name, crop_class, birth_cycle, yield_per)
+    res = crop.search_crop(crop_id, crop_name, crop_class, irrigation_per, birth_cycle, yield_per)
     if res is None:
         return jsonify({
             'response': '500',
@@ -97,7 +100,8 @@ def search_crop():
             'crop_id': re[0],
             'crop_name': re[1],
             'crop_class': re[2],
-            'birth_cycle': re[3],
-            'yield_per': re[4],
+            'irrigation_per': re[3],
+            'birth_cycle': re[4],
+            'yield_per': re[5],
         } for re in res]}
     return jsonify(resp)

@@ -67,7 +67,7 @@
             };
 
             console.log('DOMContentLoaded 事件已触发');
-            fetch('./crop_list',{
+            fetch('./search_crop',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,8 +96,8 @@
                 // 收集表单数据
                 var cropId = '{{crop_id}}';
                 var formData = {
-                    user_id: user_id,
-                    role: role,
+                    user_id: "{{ user_id }}",
+                    role: "{{ role }}",
                     crop_id: cropId,
                     crop_name: document.getElementById('crop_name').value,
                     crop_class: document.getElementById('crop_class').value,

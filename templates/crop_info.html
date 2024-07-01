@@ -24,31 +24,31 @@
                     <div class="layui-form-item">
                         <label for="crop_name" class="layui-form-label">
                             <span class="x-red">*</span>作物名字</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="crop_name" name="crop_name"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="crop_class" class="layui-form-label">
                             <span class="x-red">*</span>作物类型</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="crop_class" name="crop_class"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="birth_cycle" class="layui-form-label">
                             <span class="x-red">*</span>生长周期（天）</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                            <span id="birth_cycle" name="birth_cycle"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="yield_per" class="layui-form-label">
                             <span class="x-red">*</span>亩产（千克）</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="yield_per" name="yield_per"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="irrigation_per" class="layui-form-label">
                             <span class="x-red">*</span>每亩需水量（升）</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="irrigation_per" name="irrigation_per"></span></div>
                     </div>
                 </form>
@@ -63,7 +63,7 @@
             };
 
             console.log('DOMContentLoaded 事件已触发');
-            fetch('./crop_list',{
+            fetch('./search_crop',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 from dbse.connection import *
 
 
-def add_crop(crop_name, irrigation_per, crop_class, birth_cycle, yield_per) -> int or None:
+def add_crop(crop_name, crop_class, irrigation_per, birth_cycle, yield_per) -> int or None:
     """
     Add a new crop
     :param irrigation_per:
@@ -52,7 +52,7 @@ def del_crop(crop_id) -> bool or None:
         close_db_connection(db)
 
 
-def change_crop(crop_id, crop_name=None, irrigation_per=None, crop_class=None, birth_cycle=None,
+def change_crop(crop_id, crop_name=None, crop_class=None, irrigation_per=None, birth_cycle=None,
                 yield_per=None) -> bool or None:
     """
     Change crop information
@@ -69,7 +69,7 @@ def change_crop(crop_id, crop_name=None, irrigation_per=None, crop_class=None, b
         db = get_db_connection()
         cursor = db.cursor()
 
-        params = {'crop_name': crop_name, 'irrigation': irrigation_per, 'crop_class': crop_class,
+        params = {'crop_name': crop_name, 'irrigation_per': irrigation_per, 'crop_class': crop_class,
                   'birth_cycle': birth_cycle, 'yield_per': yield_per}
 
         query_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
@@ -91,23 +91,25 @@ def change_crop(crop_id, crop_name=None, irrigation_per=None, crop_class=None, b
         close_db_connection(db)
 
 
-def search_crop(crop_id=None, crop_name=None, irrigation = None,crop_class=None, birth_cycle=None, yield_per=None) -> list or None:
+def search_crop(crop_id=None, crop_name=None, crop_class=None, irrigation=None, birth_cycle=None,
+                yield_per=None) -> list or None:
     """
-    Search crop by crop_id, crop_name, crop_class, birth_cycle, yield_per
+    Search crop by crop_id, crop_name, crop_class, irrigation，birth_cycle, yield_per
     :param irrigation:
     :param crop_id:
     :param crop_name:
     :param crop_class:
     :param birth_cycle:
     :param yield_per:
-    :return: [(crop_id, crop_name, irrigation_per,crop_class, birth_cycle, yield_per), ...]
+    :return: [(crop_id, crop_name, crop_class, irrigation_per, birth_cycle, yield_per), ...]
     """
     db = None
     try:
         db = get_db_connection()
         cursor = db.cursor()
 
-        params = {'crop_id': crop_id, 'crop_name': crop_name, 'irrigation_per':irrigation,'crop_class': crop_class, 'birth_cycle': birth_cycle,
+        params = {'crop_id': crop_id, 'crop_name': crop_name, 'irrigation_per': irrigation, 'crop_class': crop_class,
+                  'birth_cycle': birth_cycle,
                   'yield_per': yield_per}
 
         query_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != '']

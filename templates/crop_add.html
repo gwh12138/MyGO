@@ -61,14 +61,21 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
             // 获取表单元素
-            var formElement = document.querySelector('.layui-form');
-            var formData = new FormData(formElement);
-            formData.append('user_id','{{user_id}}');
-            formData.append('role','{{role}}');
+            var form = document.querySelector('.layui-form');
 
             // 监听表单的提交事件
-            formElement.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function(event) {
                 event.preventDefault(); // 阻止表单默认提交行为
+
+                var formData = {
+                    user_id: "{{ user_id }}",
+                    role: "{{ role }}",
+                    crop_name: document.getElementById('crop_name').value,
+                    crop_class: document.getElementById('crop_class').value,
+                    birth_cycle: document.getElementById('birth_cycle').value,
+                    yield_per: document.getElementById('yield_per').value,
+                    irrigation_per: document.getElementById('irrigation_per').value,
+                };
 
                 // 使用fetch API发送数据
                 fetch('/add_crop', {
