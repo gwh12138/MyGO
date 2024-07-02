@@ -45,6 +45,12 @@ def change_password_html():
     return flask.render_template('./password_change.html', user_id=user_id)
 
 
+@app.route("/welcome_field.html")
+def welcome_field_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./welcome_field.html', user_id=user_id)
+
+
 @app.route("/field_add.html")
 def field_add_html():
     user_id = request.args.get('user_id')

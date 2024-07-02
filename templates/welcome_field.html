@@ -22,7 +22,11 @@
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-body ">
-                            <blockquote class="layui-elem-quote">欢迎管理员！
+                            <blockquote class="layui-elem-quote">欢迎农田管理员！
+                                <span id="check_state"></span>
+                                <button class="layui-btn" onclick="clock_in()">打卡</button>
+                                <button class="layui-btn" onclick="clock_out()">下班</button>
+                                <button class="layui-btn" onclick="for_leave()">请假</button>
                             </blockquote>
                         </div>
                     </div>
@@ -71,13 +75,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">数据统计</div>
+                        <div class="layui-card-body ">
+                            <div id="main" style="width: 100%;height:400px;"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="layui-col-sm6 layui-col-md3">
                     <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-header">任务
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">总</span></div>
                         <div class="layui-card-body  ">
                             <p class="layuiadmin-big-font">33,555</p>
-                            <p>新下载
+                            <p>完成率
                                 <span class="layuiadmin-span-color">10%
                                     <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
                             </p>
@@ -86,11 +98,11 @@
                 </div>
                 <div class="layui-col-sm6 layui-col-md3">
                     <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-header">任务
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">本年</span></div>
                         <div class="layui-card-body ">
                             <p class="layuiadmin-big-font">33,555</p>
-                            <p>新下载
+                            <p>完成率
                                 <span class="layuiadmin-span-color">10%
                                     <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
                             </p>
@@ -99,11 +111,11 @@
                 </div>
                 <div class="layui-col-sm6 layui-col-md3">
                     <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-header">任务
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">本月</span></div>
                         <div class="layui-card-body ">
                             <p class="layuiadmin-big-font">33,555</p>
-                            <p>新下载
+                            <p>完成率
                                 <span class="layuiadmin-span-color">10%
                                     <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
                             </p>
@@ -112,11 +124,11 @@
                 </div>
                 <div class="layui-col-sm6 layui-col-md3">
                     <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-header">任务
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">本日</span></div>
                         <div class="layui-card-body ">
                             <p class="layuiadmin-big-font">33,555</p>
-                            <p>新下载
+                            <p>完成率
                                 <span class="layuiadmin-span-color">10%
                                     <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
                             </p>
@@ -125,13 +137,24 @@
                 </div>
                 <div class="layui-col-md12">
                     <div class="layui-card">
+                        <div class="layui-card-header">任务接收</div>
                         <div class="layui-card-body ">
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="操作" name="oprate" id="oprate"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="对应农田" name="field_name" id="field_name"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="任务状态" name="task_state" id="task_state"></div>
+                            
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="search" id="search">
+                                        <i class="layui-icon">&#xe615;</i></button>
+                                </div>
                         </div>
-                    </div>
-                </div>
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-body ">
+                        <div class="layui-card-header">
+                        </div>
+                        <div class="layui-card-body">
+                            <table id="jsonTable" lay-filter="jsonTableFilter"></table>
                         </div>
                     </div>
                 </div>
@@ -140,4 +163,214 @@
         </div>
         </div>
     </body>
+    <script>
+        // 初始化表格
+        function initTable(data) {
+            var role = '{{role}}';
+            var user_id = '{{user_id}}';
+            var cols = [
+                {field: 'oprate', title: '操作', width: 120},
+                {field: 'field_name', title: '对应农田', width: 120, sort: true},
+                {field: 'task_state', title: '任务状态', width: 120, sort: true},
+            ];
+
+
+            table.render({
+                elem: '#jsonTable',
+                cols: [cols],
+                data: data, // 数据接口
+                page: true // 开启分页
+            });
+        }
+
+        documentdocument.addEventListener('DOMContentLoaded', function() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            // 解析URL查询参数
+            var ckeckParams = {
+                user_id: '{{user_id}}',
+                check_time: today
+            };
+
+            // 如果crop_id存在，则发起请求获取数据
+            console.log('DOMContentLoaded 事件已触发');
+            fetch('./search_check_in',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(checkParams)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if(data.check_in_list.length === 0){
+                    document.getElementById('check_state').innerText = '今日未打卡';
+                }
+                else if(data.check_in_list.length === 1){
+                    document.getElementById('check_state').innerText = '今日已打卡，别忘了下班';
+                }
+                else if(data.check_in_list.length === 2){
+                    document.getElementById('check_state').innerText = '今日已下班';
+                }
+                else{
+                    layer.msg('错误的签到状态', {icon: 5});
+                }
+            })
+            .catch(function(error) {
+                layer.msg('获取目标数据失败', {icon: 5});
+            });
+        });
+
+
+        function clock_in(){
+            var today = new Date();
+            var formData = {
+                user_id: '{{user_id}}',
+                check_in_state: '上班',
+                check_time: today
+            }
+
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            var today_ymd = yyyy + '-' + mm + '-' + dd;
+
+            var ckeckParams = {
+                user_id: '{{user_id}}',
+                check_time: today_ymd
+            };
+
+            fetch('./search_check_in',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(checkParams)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if(data.check_in_list.length === 0){
+                    fetch('./add_check_in',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(jsonData) {
+                    //返回success
+                        if (jsonData.response === 'success') {
+                            // 删除成功
+                            layer.msg('打卡成功', {icon: 1});
+                            // 刷新表格
+                            location.reload();
+                        } else {
+                            // 删除失败
+                            layer.msg('收获失败', {icon: 5});
+                        }
+                    })
+                    .catch(function(error) {
+                        layer.msg('请求失败', {icon: 5});
+                    });
+                }
+                else{
+                    layer.msg('今日已打卡', {icon: 5});
+                }
+            })
+            .catch(function(error) {
+                layer.msg('获取目标数据失败', {icon: 5});
+            });
+        }
+
+        function clock_out(){
+            var today = new Date();
+            var check_in_state;
+            
+            if(today.getHours() > 17){
+                check_in_state = '加班';
+            }
+            else{
+                check_in_state = '正常下班'
+            }
+
+            var formData = {
+                user_id: '{{user_id}}',
+                check_in_state: '下班',
+                check_time: today
+            }
+
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            var today_ymd = yyyy + '-' + mm + '-' + dd;
+
+            var ckeckParams = {
+                user_id: '{{user_id}}',
+                check_time: today_ymd
+            };
+
+            console.log('DOMContentLoaded 事件已触发');
+            fetch('./search_check_in',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(checkParams)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if(data.check_in_list.length === 0){
+                    layer.msg('今日未打卡', {icon: 5});
+                }
+                else if(data.check_in_list.length === 1){
+                    fetch('./clock_out',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(jsonData) {
+                    //返回success
+                        if (jsonData.response === 'success') {
+                            layer.msg('下班喽', {icon: 1});
+                        } else {
+                            layer.msg('收获失败', {icon: 5});
+                        }
+                    })
+                    .catch(function(error) {
+                        layer.msg('请求失败', {icon: 5});
+                    });
+                }
+                else if(data.check_in_list.length === 2){
+                    layer.msg('今日已下班', {icon: 5});
+                }
+                else{
+                    layer.msg('错误的签到状态', {icon: 5});
+                }
+            })
+            .catch(function(error) {
+                layer.msg('获取目标数据失败', {icon: 5});
+            });
+        }
+    </script>
 </html>

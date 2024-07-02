@@ -39,8 +39,6 @@
                             <div class="layui-input-inline layui-show-xs-block">
                                 <input class="layui-input" placeholder="生日" name="birthday" id="birthday" type="date"></div>
                             <div class="layui-input-inline layui-show-xs-block">
-                                <input class="layui-input" placeholder="工作经历" name="work_experience" id="work_experience"></div>
-                            <div class="layui-input-inline layui-show-xs-block">
                                 <input class="layui-input" placeholder="职能" name="role" id="role"></div>
 
                             <div class="layui-input-inline layui-show-xs-block">
@@ -54,6 +52,7 @@
                             </span>
                             <input type="file" id="csvFile" accept=".csv">
                             <button class="layui-btn" onclick="uploadFile()">上传</button>
+                            <button class="layui-btn" onclick="downloadFile()">导出</button>
                         </div>
                         <div class="layui-card-body">
                             <table id="jsonTable" lay-filter="jsonTableFilter"></table>
@@ -102,13 +101,12 @@
                     }},
                     {title: '删除', width: 180, templet: function(d){
                         return '<div class="td-manage">' +
-                               '<a title="删除" onclick="member_del(this,\'' + d.user_id + '\',\'' + role + '\')" href="javascript:;">' +
+                               '<a title="删除" onclick="member_del(this,\'' + d.user_id + '\',\'' + d.role + '\',\'' + role + '\')" href="javascript:;">' +
                                '<i class="layui-icon">&#xe640;</i></a>' +
                                '</div>';
                     }}
                 );
             }
-
 
             table.render({
                 elem: '#jsonTable',
@@ -118,46 +116,112 @@
             });
         }
 
+        window.uploadFile = function() {
+            // 获取文件
+            var file = document.getElementById('csvFile').files[0];
+            if (!file) {
+                alert('请选择一个文件！');
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('file', file);  
+
+            // 使用fetch API发送文件
+            fetch('/input_account_csv', { // 请替换为你的后端接口
+                method: 'POST',
+                body: formData
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonData) {
+            //返回success
+                if (jsonData.response === 'success') {
+                    // 删除成功
+                    layer.msg('上传成功!', {icon: 1});
+                    // 刷新表格
+                    location.reload();
+                } else {
+                    // 删除失败
+                    layer.msg('上传失败', {icon: 5});
+                }
+            })
+            .catch(function(error) {
+                layer.msg('请求失败', {icon: 5});
+            });
+        }
+
+        window.downloadFile = function() {
+            // 使用fetch API发送文件
+            fetch('/output_account_csv', { // 请替换为你的后端接口
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({})
+            })
+            .then(function(response) {
+                return response.blob();
+            })
+            .then(function(blob) {
+                var downloadLink = window.URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                a.href = downloadLink;
+                a.download = "filename.csv"; // 设置要下载的文件名
+                document.body.appendChild(a);
+                a.click();
+            })
+            .catch(function(error) {
+                layer.msg('请求失败', {icon: 5});
+            });
+        }
+
         window.member_change = function(obj, user_id, role) {
             // 打开新的网页，传递ID参数
             var index = xadmin.open('修改职工信息','./employee_change.html?user_id=' + user_id + '&role=' + role);
         }
 
         // 删除成员
-        window.member_del = function(obj, user_id, role) {
-            layer.confirm('确认要删除吗？', function(index) {
-                var queryParams = {
-                    user_id: user_id,
-                    role: role,
-                };
-                // 发送删除请求
-                fetch('./del_account',{
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(queryParams)
-                })
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(jsonData) {
-                //返回success
-                    if (jsonData.response === 'success') {
-                        // 删除成功
-                        layer.msg('已删除!', {icon: 1});
-                        // 刷新表格
-                        location.reload();
-                    } else {
-                        // 删除失败
-                        layer.msg('删除失败', {icon: 5});
-                    }
-                })
-                .catch(function(error) {
-                    layer.msg('请求失败', {icon: 5});
+        window.member_del = function(obj, user_id, user_role, role) {
+            if(user_role === 'admin'){
+                layer.msg('不能删除管理员!', {icon: 1});
+            }
+            else{
+                layer.confirm('确认要删除吗？', function(index) {
+                    var queryParams = {
+                        user_id: user_id,
+                        role: role,
+                    };
+                    // 发送删除请求
+                    fetch('./del_account',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(queryParams)
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(jsonData) {
+                    //返回success
+                        if (jsonData.response === 'success') {
+                            // 删除成功
+                            layer.msg('已删除!', {icon: 1});
+                            // 刷新表格
+                            location.reload();
+                        } else {
+                            // 删除失败
+                            layer.msg('删除失败', {icon: 5});
+                        }
+                    })
+                    .catch(function(error) {
+                        layer.msg('请求失败', {icon: 5});
+                    });
+                    layer.close(index);
                 });
-                layer.close(index);
-            });
+            }
         }
 
         // 页面加载完毕自动获取全部数据
@@ -197,10 +261,9 @@
             var sex = document.getElementById('sex').value;
             var telephone = document.getElementById('telephone').value;
             var birthday = document.getElementById('birthday').value;
-            var work_experience = document.getElementById('work_experience').value;
             var role = document.getElementById('role').value;
 
-            if (!real_name && !user_name && !sex && !telephone && !birthday && !work_experience && !role) {
+            if (!real_name && !user_name && !sex && !telephone && !birthday && !role) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
                 location.reload();
                 return; // 如果所有数据为空，则不执行后续操作
@@ -213,7 +276,6 @@
                 sex: sex,
                 telephone: telephone,
                 birthday: birthday,
-                work_experience: work_experience,
                 role: role,
             };
 

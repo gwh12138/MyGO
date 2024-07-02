@@ -1,6 +1,6 @@
 import csv
 from app import app
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from dbse import *
 
 
@@ -128,16 +128,31 @@ def search_account():
     return jsonify(res)
 
 
-def output_account_csv(root):
-    res = account.search_account()
-    data = [list(re) + list(employee_info.search_employee_info(re[0])[0])[0:-1] for re in res]
+@app.route('/input_account_csv', methods=["POST"])
+def input_account_csv():
+    file = request.files.get('file')
+    root = './static/input.csv'
+    file.save(root)
+    with open(root, 'r', newline='') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if len(row) != 10:
+                return jsonify({
+                    'response': 'illegal format'
+                })
+            user_id = account.add_account(row[1], row[2], row[3])
+            employee_info.add_employee_info(user_id, row[4], row[5], row[6], row[7], row[8])
+    return jsonify({
+        'response': 'success'
+    })
+
+
+@app.route('/output_account_csv', methods=["POST"])
+def output_account_csv():
+    accounts = account.search_account()
+    res = [list(acc) + list(employee_info.search_employee_info(acc[0])[0][1:]) for acc in accounts]
+    root = './static/information.csv'
     with open(root, 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerows(data)
-
-
-def input_account_csv(root):
-    reader = csv.reader(root)
-    for row in reader:
-        user_id = account.add_account(row[0], row[1], row[2])
-        employee_info.add_employee_info(user_id, row[3], row[4], row[5], row[6])
+        writer.writerows(res)
+    return send_file(root)
