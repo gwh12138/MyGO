@@ -7,6 +7,7 @@ from backend.field import *
 from backend.crop import *
 from backend.plant import *
 from backend.harvest import *
+from backend.check import *
 import dbse
 
 
@@ -49,6 +50,13 @@ def change_password_html():
 def welcome_field_html():
     user_id = request.args.get('user_id')
     return flask.render_template('./welcome_field.html', user_id=user_id)
+
+
+@app.route("/check_in.html")
+def check_in_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./check_in.html', user_id=user_id, role=role)
 
 
 @app.route("/field_add.html")

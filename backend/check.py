@@ -1,6 +1,8 @@
+from datetime import datetime
 from app import app
 from flask import request, jsonify
 from dbse import *
+import pytz
 
 
 @app.route("/add_check_in", methods=["POST"])
@@ -12,7 +14,9 @@ def add_check_in():
         return jsonify({
             'response': 'input none',
         })
-
+    check_time = datetime.fromisoformat(check_time)
+    local_timezone = pytz.timezone('Asia/Shanghai')
+    check_time = check_time.astimezone(local_timezone)
     res = check_in.add_check_in(user_id, check_in_state, check_time)
     if res is None:
         return jsonify({
@@ -65,7 +69,10 @@ def change_check_in():
         return jsonify({
             'response': 'input none',
         })
-
+    if check_time:
+        check_time = datetime.fromisoformat(check_time)
+        local_timezone = pytz.timezone('Asia/Shanghai')
+        check_time = check_time.astimezone(local_timezone)
     res = check_in.change_check_in(check_in_id, user_id, check_in_state, check_time)
     if res is None:
         return jsonify({
@@ -87,6 +94,10 @@ def search_check_in():
     user_id = request.json.get("user_id")
     check_in_state = request.json.get("check_in_state")
     check_time = request.json.get("check_time")
+    if check_time:
+        check_time = datetime.fromisoformat(check_time)
+        local_timezone = pytz.timezone('Asia/Shanghai')
+        check_time = check_time.astimezone(local_timezone)
     res = check_in.search_check_in(check_in_id, user_id, check_in_state, check_time)
     if res is None:
         return jsonify({
@@ -98,8 +109,8 @@ def search_check_in():
             'check_in_id': re[0],
             'user_id': re[1],
             'check_in_state': re[2],
-            'check_time': re[3],
-            'real_name': employee_info.search_employee_info(re[0])[0][1],
+            'check_time': re[3].strftime('%Y-%m-%d %H:%M:%S'),
+            'real_name': employee_info.search_employee_info(re[1])[0][1],
         } for re in res]
     }
     return resp

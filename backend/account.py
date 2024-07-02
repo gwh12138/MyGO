@@ -35,15 +35,11 @@ def add_account():
 def del_account():
     user_id = request.json.get("user_id")
     password = request.json.get("pwd")
-    res = employee_info.del_employee_info(user_id)
-    if not res:
+    if None in (user_id, password):
         return jsonify({
-            'response': '500'
+            'response': 'input none'
         })
-    elif res == 0:
-        return jsonify({
-            'response': 'error user name or error password'
-        })
+
     res = account.del_account(user_id, password)
     if not res:
         return jsonify({
@@ -135,13 +131,15 @@ def input_account_csv():
     file.save(root)
     with open(root, 'r', newline='') as file:
         reader = csv.reader(file)
-        for row in reader:
-            if len(row) != 10:
-                return jsonify({
-                    'response': 'illegal format'
-                })
-            user_id = account.add_account(row[1], row[2], row[3])
-            employee_info.add_employee_info(user_id, row[4], row[5], row[6], row[7], row[8])
+        data = [row for row in reader]
+    for row in data:
+        if len(row) != 10:
+            return jsonify({
+                'response': 'illegal format'
+            })
+    for row in data:
+        user_id = account.add_account(row[1], row[2], row[3])
+        employee_info.add_employee_info(user_id, row[4], row[5], row[6], row[7], row[8])
     return jsonify({
         'response': 'success'
     })

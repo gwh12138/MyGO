@@ -166,7 +166,6 @@
     <script>
         // 初始化表格
         function initTable(data) {
-            var role = '{{role}}';
             var user_id = '{{user_id}}';
             var cols = [
                 {field: 'oprate', title: '操作', width: 120},
@@ -183,8 +182,9 @@
             });
         }
 
-        documentdocument.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             var today = new Date();
+
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
@@ -192,7 +192,7 @@
             today = yyyy + '-' + mm + '-' + dd;
 
             // 解析URL查询参数
-            var ckeckParams = {
+            var checkParams = {
                 user_id: '{{user_id}}',
                 check_time: today
             };
@@ -217,7 +217,7 @@
                     document.getElementById('check_state').innerText = '今日已打卡，别忘了下班';
                 }
                 else if(data.check_in_list.length === 2){
-                    document.getElementById('check_state').innerText = '今日已下班';
+                    document.getElementById('check_state').innerText = '拜拜';
                 }
                 else{
                     layer.msg('错误的签到状态', {icon: 5});
@@ -231,6 +231,7 @@
 
         function clock_in(){
             var today = new Date();
+            console.log(today);
             var formData = {
                 user_id: '{{user_id}}',
                 check_in_state: '上班',
@@ -242,8 +243,8 @@
             var yyyy = today.getFullYear();
 
             var today_ymd = yyyy + '-' + mm + '-' + dd;
-
-            var ckeckParams = {
+            console.log(today);
+            var checkParams = {
                 user_id: '{{user_id}}',
                 check_time: today_ymd
             };
@@ -260,6 +261,7 @@
             })
             .then(function(data) {
                 if(data.check_in_list.length === 0){
+                    console.log(JSON.stringify(formData));
                     fetch('./add_check_in',{
                         method: 'POST',
                         headers: {
@@ -318,7 +320,7 @@
 
             var today_ymd = yyyy + '-' + mm + '-' + dd;
 
-            var ckeckParams = {
+            var checkParams = {
                 user_id: '{{user_id}}',
                 check_time: today_ymd
             };
@@ -339,7 +341,7 @@
                     layer.msg('今日未打卡', {icon: 5});
                 }
                 else if(data.check_in_list.length === 1){
-                    fetch('./clock_out',{
+                    fetch('./add_check_in',{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -353,6 +355,7 @@
                     //返回success
                         if (jsonData.response === 'success') {
                             layer.msg('下班喽', {icon: 1});
+                            location.reload();
                         } else {
                             layer.msg('收获失败', {icon: 5});
                         }

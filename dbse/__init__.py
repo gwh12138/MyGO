@@ -7,4 +7,5 @@ __all__ = (
     'secure',
     'plant_info',
     'harvest_info',
+    'check_in',
 )

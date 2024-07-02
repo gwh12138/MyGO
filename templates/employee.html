@@ -101,7 +101,7 @@
                     }},
                     {title: '删除', width: 180, templet: function(d){
                         return '<div class="td-manage">' +
-                               '<a title="删除" onclick="member_del(this,\'' + d.user_id + '\',\'' + d.role + '\',\'' + role + '\')" href="javascript:;">' +
+                               '<a title="删除" onclick="member_del(this,\'' + d.user_id + '\',\'' + d.pwd + '\',\'' + d.role + '\',\'' + role + '\')" href="javascript:;">' +
                                '<i class="layui-icon">&#xe640;</i></a>' +
                                '</div>';
                     }}
@@ -183,7 +183,7 @@
         }
 
         // 删除成员
-        window.member_del = function(obj, user_id, user_role, role) {
+        window.member_del = function(obj, user_id, pwd, user_role, role) {
             if(user_role === 'admin'){
                 layer.msg('不能删除管理员!', {icon: 1});
             }
@@ -191,6 +191,7 @@
                 layer.confirm('确认要删除吗？', function(index) {
                     var queryParams = {
                         user_id: user_id,
+                        pwd: pwd,
                         role: role,
                     };
                     // 发送删除请求

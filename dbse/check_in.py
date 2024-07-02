@@ -94,10 +94,10 @@ def search_check_in(check_in_id=None, user_id=None, check_in_state=None, check_t
         db = get_db_connection()
         cursor = db.cursor()
         params = {"check_in_id": check_in_id, "user_id": user_id, "check_in_state": check_in_state, "DATE(check_time)": check_time}
-        where_parts = [f"{key} = %s" for key, value in params.items() if value is not None ]
+        where_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != ""]
         if where_parts:
             sql = f"SELECT * FROM check_in WHERE {' AND '.join(where_parts)}"
-            cursor.execute(sql, [value for key, value in params.items() if value is not None])
+            cursor.execute(sql, [value for key, value in params.items() if value is not None and value != ""])
         else:
             sql = "SELECT * FROM check_in"
             cursor.execute(sql)

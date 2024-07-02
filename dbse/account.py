@@ -42,8 +42,6 @@ def del_account(user_id, password) -> bool or None:
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        if password is not None:
-            password = PasswordSecure.encryption(password)
         sql = "DELETE FROM account WHERE user_id = %s AND password = %s"
         cursor.execute(sql, (user_id, password))
         db.commit()
