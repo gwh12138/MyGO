@@ -62,8 +62,6 @@
                         <dd>
                             <a onclick="xadmin.open('修改密码','./password_change.html?user_id=' + '{{user_id}}')">修改密码</a></dd>
                         <dd>
-                            <a onclick="xadmin.open('切换帐号','./login.html')">切换帐号</a></dd>
-                        <dd>
                             <a href="./login.html">退出</a></dd>
                     </dl>
                 </li>
@@ -87,6 +85,11 @@
                                 <a onclick="xadmin.add_tab('职工管理','employee.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>职工管理</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('考勤管理','check_in.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>考勤管理</cite></a>
                             </li>
                         </ul>
                     </li>
