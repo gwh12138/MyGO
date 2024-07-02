@@ -31,7 +31,7 @@ def add_account(user_name, password, role) -> int or None:
         close_db_connection(db)
 
 
-def del_account(user_id, password) -> bool or None:
+def del_account(user_id) -> bool or None:
     """
     Delete an account
     :param user_id:
@@ -42,8 +42,8 @@ def del_account(user_id, password) -> bool or None:
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        sql = "DELETE FROM account WHERE user_id = %s AND password = %s"
-        cursor.execute(sql, (user_id, password))
+        sql = "DELETE FROM account WHERE user_id = %s"
+        cursor.execute(sql, user_id)
         db.commit()
         if cursor.rowcount == 0:
             return False

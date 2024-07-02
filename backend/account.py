@@ -39,9 +39,23 @@ def del_account():
         return jsonify({
             'response': 'input none'
         })
+    _password = account.search_account(user_id)
+    if _password is None:
+        return jsonify({
+            'response': '500'
+        })
+    elif _password == 0:
+        return jsonify({
+            'response': 'error user id'
+        })
+    _password = _password[0][2]
+    if _password != password:
+        return jsonify({
+            'response': 'error password'
+        })
 
-    res = account.del_account(user_id, password)
-    if not res:
+    res = account.del_account(user_id)
+    if res is None:
         return jsonify({
             'response': '500'
         })
