@@ -10,4 +10,5 @@ __all__ = (
     'check_in',
     'basic_salary',
     'salary',
+    'task'
 )

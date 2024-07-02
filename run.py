@@ -10,6 +10,7 @@ from backend.harvest import *
 from backend.check import *
 from backend.basic_salary import *
 from backend.salary import *
+from backend.task import *
 import dbse
 
 
@@ -171,9 +172,41 @@ def salary_html():
     return flask.render_template('./salary.html', user_id=user_id, role=role)
 
 
+@app.route("/task.html")
+def task_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./task.html', user_id=user_id, role=role)
+
+
+@app.route("/task_add.html")
+def task_add_html():
+    return flask.render_template('./task_add.html')
+
+
+@app.route("/task_change.html")
+def task_change_html():
+    task_id = request.args.get('task_id')
+    return flask.render_template('./task_change.html', task_id=task_id)
+
+
+@app.route("/welcome_plant.html")
+def welcome_plant_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./welcome_plant.html', user_id=user_id)
+
+
+@app.route("/welcome_harvest.html")
+def welcome_harvest_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./welcome_harvest.html', user_id=user_id)
+
+
 @app.route('/01.jpg')
 def img01():
     return app.send_static_file('01.jpg')
+
+
 
 
 if __name__ == '__main__':

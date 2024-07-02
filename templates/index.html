@@ -96,6 +96,11 @@
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>工资管理</cite></a>
                             </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('工作管理','task.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>工作管理</cite></a>
+                            </li>
                         </ul>
                     </li>
                     <li id="crop">
@@ -230,7 +235,7 @@
                         iframe.src = './welcome_plant.html?user_id='+user_id;
                         break;
                     case 'harvest':
-                        iframe.src = './welcome_plant.html?user_id='+user_id;
+                        iframe.src = './welcome_harvest.html?user_id='+user_id;
                         break;
                 }
             })
