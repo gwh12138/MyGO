@@ -156,6 +156,19 @@ def harvest_html():
     return flask.render_template('./harvest.html', user_id=user_id, role=role)
 
 
+@app.route("/welcome_hr.html")
+def welcome_hr_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./welcome_hr.html', user_id=user_id)
+
+
+@app.route("/salary.html")
+def salary_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./salary.html', user_id=user_id, role=role)
+
+
 @app.route('/01.jpg')
 def img01():
     return app.send_static_file('01.jpg')
