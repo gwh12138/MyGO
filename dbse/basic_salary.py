@@ -1,4 +1,4 @@
-from connection import *
+from dbse.connection import *
 
 
 def add_basic_salary(role_name, role_salary) -> bool or None:

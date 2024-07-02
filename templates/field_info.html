@@ -24,67 +24,67 @@
                     <div class="layui-form-item">
                         <label for="field_name" class="layui-form-label">
                             <span class="x-red">*</span>田地名字</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="field_name" name="field_name"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="size" class="layui-form-label">
                             <span class="x-red">*</span>田地大小</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="size" name="size"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="crop_class" class="layui-form-label">
                             <span class="x-red">*</span>种植作物类型</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="crop_class" name="crop_class"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="latitude" class="layui-form-label">
                             <span class="x-red">*</span>纬度</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                            <span id="latitude" name="latitude"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="longitude" class="layui-form-label">
                             <span class="x-red">*</span>经度</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="longitude" name="longitude"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="length" class="layui-form-label">
                             <span class="x-red">*</span>长度（米）</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                            <span id="length" name="length"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="width" class="layui-form-label">
                             <span class="x-red">*</span>宽度（米）</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="width" name="width"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="N" class="layui-form-label">
                             <span class="x-red">*</span>土壤含氮(0~0.15)</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="N" name="N"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="P" class="layui-form-label">
                             <span class="x-red">*</span>土壤含磷(0~0.25)</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="P" name="P"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="K" class="layui-form-label">
                             <span class="x-red">*</span>土壤含钾(0~0.35)</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="K" name="K"></span></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="pH" class="layui-form-label">
                             <span class="x-red">*</span>土壤pH值(0~14)</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-form-mid">
                             <span id="pH" name="pH"></span></div>
                     </div>
                 </form>
@@ -101,6 +101,7 @@
                 </div>
             </div>
         </div>
+        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
             // 解析URL查询参数
@@ -134,65 +135,62 @@
                 document.getElementById('P').innerText = data.P || '';
                 document.getElementById('K').innerText = data.K || '';
                 document.getElementById('pH').innerText = data.pH || '';
+
+                var myChart = echarts.init(document.getElementById('main'));
+
+                var pH = data.pH;
+                var N = data.N;
+                var P = data.P;
+                var K = data.K;
+                var option = {
+                    title: {
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                    },
+                    radar: [
+                        // 第一个雷达图配置
+                        {
+                            // 雷达图的指标
+                            indicator: [
+                                { name: '土壤pH值', max: 14 },
+                                { name: '土壤含氮', max: 0.15, min: 0 },
+                                { name: '土壤含磷', max: 0.25, min: 0 },
+                                { name: '土壤含钾', max: 0.35, min: 0 },
+                            ],
+                            // 雷达图中心点位置
+                            center: ['25%', '50%'],
+                            // 雷达图半径
+                            radius: '55%'
+                        }
+                    ],
+                    series: [
+                        // 第一个雷达图的数据系列
+                        {
+                            type: 'radar',
+                            // 指定当前系列数据对应的雷达图下标
+                            // 数据内容
+                            data: [
+                                {
+                                    value: [pH,N,P,K]
+                                }
+                            ]
+                            // 其他配置...
+                        }
+
+                    ]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
             })
             .catch(function(error) {
                 layer.msg('获取目标数据失败', {icon: 5});
             });
 
         });
-        </script>
-        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
-        <script type="text/javascript">
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
-
-            var pH = document.getElementById('pH').innerText;
-            var N = document.getElementById('N').innerText;
-            var P = document.getElementById('P').innerText;
-            var K = document.getElementById('K').innerText;
-            var option = {
-                title: {
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                },
-                radar: [
-                    // 第一个雷达图配置
-                    {
-                        // 雷达图的指标
-                        indicator: [
-                            { name: '土壤pH值', max: 14 },
-                            { name: '土壤含氮', max: 0.15, min: 0 },
-                            { name: '土壤含磷', max: 0.25, min: 0 },
-                            { name: '土壤含钾', max: 0.35, min: 0 },
-                        ],
-                        // 雷达图中心点位置
-                        center: ['25%', '50%'],
-                        // 雷达图半径
-                        radius: '55%'
-                    }
-                ],
-                series: [
-                    // 第一个雷达图的数据系列
-                    {
-                        type: 'radar',
-                        // 指定当前系列数据对应的雷达图下标
-                        // 数据内容
-                        data: [
-                            {
-                                value: [pH,N,P,K]
-                            }
-                        ]
-                        // 其他配置...
-                    }
-
-                ]
-            };
-
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
         </script>
         <script>var _hmt = _hmt || []; (function() {
                 var hm = document.createElement("script");

@@ -8,6 +8,8 @@ from backend.crop import *
 from backend.plant import *
 from backend.harvest import *
 from backend.check import *
+from backend.basic_salary import *
+from backend.salary import *
 import dbse
 
 

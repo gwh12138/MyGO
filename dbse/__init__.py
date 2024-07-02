@@ -8,4 +8,6 @@ __all__ = (
     'plant_info',
     'harvest_info',
     'check_in',
+    'basic_salary',
+    'salary',
 )

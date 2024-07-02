@@ -1,8 +1,8 @@
 from dbse.connection import *
 
 
-def add_check_in(user_id, salary_date, basic_salary,
-                 performance_based_salary, total_salary, state) -> bool or None:
+def add_salary(user_id, salary_date, basic_salary,
+                 performance_based_salary, total_salary, state = '未发放') -> bool or None:
     """
     :param user_id:
     :param salary_date:
@@ -30,7 +30,7 @@ def add_check_in(user_id, salary_date, basic_salary,
         close_db_connection(db)
 
 
-def del_check_in(user_id, salary_date) -> bool or None:
+def del_salary(user_id, salary_date) -> bool or None:
     """
     delete a salary
     :param user_id:
@@ -54,7 +54,7 @@ def del_check_in(user_id, salary_date) -> bool or None:
         close_db_connection(db)
 
 
-def change_check_in(user_id, salary_date, basic_salary=None,
+def change_salary(user_id, salary_date, basic_salary=None,
                     performance_based_salary=None, total_salary=None, state=None) -> bool or None:
     """
     Change a salary
@@ -87,7 +87,7 @@ def change_check_in(user_id, salary_date, basic_salary=None,
         close_db_connection(db)
 
 
-def get_check_in(user_id=None, salary_date=None, basic_salary=None,
+def search_salary(user_id=None, salary_date=None, basic_salary=None,
                  performance_based_salary=None, total_salary=None, state=None) -> list or None:
     """
     Search salary

@@ -35,7 +35,7 @@
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="基础工资" name="basic_salary" id="basic_salary" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input class="layui-input" placeholder="绩效工资" name="performance_based_salaryint" id="performance_based_salaryint" type="number"></div>
+                                    <input class="layui-input" placeholder="绩效工资" name="performance_based_salary" id="performance_based_salary" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="总工资" name="total_salary" id="total_salary" type="number"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
@@ -81,7 +81,7 @@
                 {field: 'real_name', title: '职工姓名', width: 120},
                 {field: 'salary_date', title: '对应月份', width: 120, sort: true},
                 {field: 'basic_salary', title: '基础工资', width: 120, sort: true},
-                {field: 'performance_based_salaryint', title: '绩效工资', width: 120, sort: true},
+                {field: 'performance_based_salary', title: '绩效工资', width: 120, sort: true},
                 {field: 'total_salary', title: '总工资', width: 120, sort: true},
                 {field: 'state', title: '发放状态', width: 120, sort: true},
             ];
@@ -107,15 +107,11 @@
 
         window.member_add = function(){
             var today = new Date();
+            var role = '{{ role }}'
 
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
-
-            var today_ymd = yyyy + '-' + mm + '-' + dd;
 
             var addParams = {
-                today_ymd: today_ymd,
+                salary_date: today,
                 role: role,
             };
 
@@ -149,14 +145,8 @@
             // 打开新的网页，传递ID参数
             var today = new Date();
 
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
-
-            var today_ymd = yyyy + '-' + mm + '-' + dd;
-
             var changeParams = {
-                today_ymd: today_ymd,
+                salary_date: today,
                 user_id: user_id,
                 role: role,
                 state: '已发放'
@@ -223,11 +213,11 @@
             var real_name = document.getElementById('real_name').value;
             var salary_date = document.getElementById('salary_date').value;
             var basic_salary = document.getElementById('basic_salary').value;
-            var performance_based_salaryint = document.getElementById('performance_based_salaryint').value;
+            var performance_based_salary = document.getElementById('performance_based_salary').value;
             var total_salary = document.getElementById('total_salary').value;
             var state = document.getElementById('state').value;
 
-            if (!real_name && !salary_date && !basic_salary && !performance_based_salaryint && !total_salary && !state) {
+            if (!real_name && !salary_date && !basic_salary && !performance_based_salary && !total_salary && !state) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
                 location.reload();
                 return; // 如果所有数据为空，则不执行后续操作
@@ -238,7 +228,7 @@
                 real_name: real_name,
                 salary_date: salary_date,
                 basic_salary: basic_salary,
-                performance_based_salaryint: performance_based_salaryint,
+                performance_based_salary: performance_based_salary,
                 total_salary: total_salary,
                 state: state,
             };
