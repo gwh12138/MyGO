@@ -207,6 +207,30 @@
                 check_time: today_ymd
             };
 
+            var leaveParams = {
+                user_id: '{{user_id}}',
+                leave_date: today_ymd
+            };
+
+            fetch('./search_leave',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(leaveParams)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if(data.leave_list.length === 0){
+                }
+                else{
+                    layer.msg('今日已请假', {icon: 5});
+                    return;
+                }
+            })
+
             fetch('./search_check_in',{
                 method: 'POST',
                 headers: {
@@ -300,7 +324,7 @@
                     layer.msg('今日未打卡', {icon: 5});
                 }
                 else if(data.check_in_list.length === 1){
-                    fetch('./clock_out',{
+                    fetch('./add_check_in',{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -333,6 +357,10 @@
             .catch(function(error) {
                 layer.msg('获取目标数据失败', {icon: 5});
             });
+        }
+
+        window.for_leave = function(){
+            xadmin.open('请假申请','./for_leave_request.html?user_id=' + '{{user_id}}');
         }
     </script>
 </html>

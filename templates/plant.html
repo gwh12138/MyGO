@@ -178,7 +178,7 @@
                 })
                 .then(function(jsonData) {
                     if(jsonData.crop_list[0].birth_cycle > diffDay){
-                        layer.msg('生长实践少于生长周期', {icon: 5});
+                        layer.msg('生长时间少于生长周期', {icon: 5});
                     }
                     else{
                         fetch('./change_plant',{

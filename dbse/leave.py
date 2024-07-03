@@ -1,12 +1,13 @@
 from dbse.connection import *
 
 
-def add_leave(user_id, leave_state, leave_date):
+def add_leave(user_id, leave_state, leave_date, reason):
     """
     Add a leave
     :param user_id:
     :param leave_state:
     :param leave_date:
+    :param reason:
     :return: True 添加成功 False 添加失败 None 出错
     """
     db = None
@@ -15,8 +16,8 @@ def add_leave(user_id, leave_state, leave_date):
         cursor = db.cursor()
         if leave_state is None or leave_state == '':
             leave_state = '申请中'
-        sql = "INSERT INTO `leave` (user_id, leave_state, leave_date) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (user_id, leave_state, leave_date))
+        sql = "INSERT INTO `leave` (user_id, leave_state, leave_date, reason) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql, (user_id, leave_state, leave_date, reason))
         db.commit()
         if cursor.rowcount == 0:
             return False
@@ -51,13 +52,14 @@ def del_leave(leave_id):
         close_db_connection(db)
 
 
-def change_leave(leave_id, user_id=None, leave_state=None, leave_date=None):
+def change_leave(leave_id, user_id=None, leave_state=None, leave_date=None, reason=None):
     """
     Change a leave
     :param leave_id:
     :param user_id:
     :param leave_state:
     :param leave_date:
+    :param reason:
     :return: True 修改成功 False 修改失败 None 出错
     """
     db = None
@@ -66,7 +68,7 @@ def change_leave(leave_id, user_id=None, leave_state=None, leave_date=None):
         cursor = db.cursor()
         if leave_state == '':
             leave_state = None
-        params = {"user_id": user_id, "leave_state": leave_state, "leave_date": leave_date}
+        params = {"user_id": user_id, "leave_state": leave_state, "leave_date": leave_date, "reason": reason}
         update_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != ""]
         sql = f"UPDATE `leave` SET {', '.join(update_parts)} WHERE leave_id = %s"
         cursor.execute(sql, tuple(
@@ -82,14 +84,14 @@ def change_leave(leave_id, user_id=None, leave_state=None, leave_date=None):
         close_db_connection(db)
 
 
-def search_leave(leave_id=None, user_id=None, leave_state=None, leave_date=None) -> list or None:
+def search_leave(leave_id=None, user_id=None, leave_state=None, leave_date=None, reason=None) -> list or None:
     """
     Search leave
     :param leave_id:
     :param user_id:
     :param leave_state:
     :param leave_date:
-    :return: [(leave_id, user_id, leave_state, leave_date)...]
+    :return: [(leave_id, user_id, leave_state, leave_date, reason)...]
     """
     db = None
     try:
@@ -97,7 +99,7 @@ def search_leave(leave_id=None, user_id=None, leave_state=None, leave_date=None)
         cursor = db.cursor()
         if leave_state == '':
             leave_state = None
-        params = {"leave_id": leave_id, "user_id": user_id, "leave_state": leave_state, "leave_date": leave_date}
+        params = {"leave_id": leave_id, "user_id": user_id, "leave_state": leave_state, "leave_date": leave_date, "reason": reason}
         where_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != ""]
         if where_parts:
             sql = f"SELECT * FROM `leave` WHERE {' AND '.join(where_parts)}"

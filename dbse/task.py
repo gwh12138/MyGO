@@ -126,3 +126,50 @@ def search_task(task_id=None, operate=None, crop_id=None, field_id=None,
         return None
     finally:
         close_db_connection(db)
+
+
+def search_task_by_date(begin_date, end_date, user_id=None) -> list or None:
+    """
+    search task by date
+    :param begin_date:
+    :param end_date:
+    :return: list 查询成功 None 查询失败
+    """
+    db = None
+    result = None
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        if user_id is None:
+            if begin_date is not None and end_date is not None:
+                sql = "SELECT * FROM task WHERE task.complete_time >= %s AND complete_time <= %s AND task_state='已完成' ORDER BY complete_time ASC"
+                cursor.execute(sql, (begin_date, end_date))
+            elif begin_date is not None:
+                sql = "SELECT * FROM task WHERE complete_time >= %s AND task_state='已完成' ORDER BY complete_time ASC"
+                cursor.execute(sql, (begin_date,))
+            elif end_date is not None:
+                sql = "SELECT * FROM task WHERE complete_time <= %s AND task_state='已完成' ORDER BY complete_time ASC"
+                cursor.execute(sql, (end_date,))
+            else:
+                sql = "SELECT * FROM task WHERE task_state='已完成'ORDER BY complete_time ASC"
+                cursor.execute(sql)
+        else:
+            if begin_date is not None and end_date is not None:
+                sql = "SELECT * FROM task WHERE task.complete_time >= %s AND complete_time <= %s AND task_state='已完成' AND user_id = %s ORDER BY complete_time ASC"
+                cursor.execute(sql, (begin_date, end_date,user_id))
+            elif begin_date is not None:
+                sql = "SELECT * FROM task WHERE complete_time >= %s AND task_state='已完成'AND user_id = %s ORDER BY complete_time ASC"
+                cursor.execute(sql, (begin_date, end_date,user_id))
+            elif end_date is not None:
+                sql = "SELECT * FROM task WHERE complete_time <= %s AND task_state='已完成'AND user_id = %s ORDER BY complete_time ASC"
+                cursor.execute(sql, (begin_date, end_date,user_id))
+            else:
+                sql = "SELECT * FROM task WHERE task_state='已完成'ORDER BY complete_time ASC"
+                cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
+    except pymysql.Error as e:
+        print('Error: ', e)
+        return None
+    finally:
+        close_db_connection(db)

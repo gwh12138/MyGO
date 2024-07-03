@@ -11,6 +11,8 @@ from backend.check import *
 from backend.basic_salary import *
 from backend.salary import *
 from backend.task import *
+from backend.leave import *
+from backend.statistics import *
 import dbse
 
 
@@ -213,6 +215,48 @@ def task_employee_html():
 def task_info_html():
     task_id = request.args.get('task_id')
     return flask.render_template('./task_info.html', task_id=task_id)
+
+
+@app.route("/for_leave_request.html")
+def for_leave_request_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./for_leave_request.html', user_id=user_id)
+
+
+@app.route("/leave.html")
+def leave_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./leave.html', user_id=user_id, role=role)
+
+
+@app.route("/leave_change.html")
+def leave_change_html():
+    leave_id = request.args.get('leave_id')
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./leave_change.html', leave_id=leave_id, user_id=user_id, role=role)
+
+
+@app.route("/leave_employee.html")
+def leave_employee_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./leave_employee.html', user_id=user_id, role=role)
+
+
+@app.route("/leave_info.html")
+def leave_info_html():
+    leave_id = request.args.get('leave_id')
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./leave_info.html', leave_id=leave_id, user_id=user_id, role=role)
+
+
+@app.route("/welcome_admin.html")
+def welcome_admin_html():
+    user_id = request.args.get('user_id')
+    return flask.render_template('./welcome_admin.html', user_id=user_id)
 
 
 @app.route('/01.jpg')

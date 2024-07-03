@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from app import app
 from flask import request, jsonify
 from dbse import *
@@ -11,11 +11,17 @@ def add_salary():
         return jsonify({
             'response': 'none input'
         })
+    now_date = datetime.fromisoformat(salary_date).strftime('%Y-%m-%d')
+    now_date = datetime.strptime(now_date, '%Y-%m-%d').date()
+    mon_b = now_date.strftime('%Y-%m-01')
+    first_day_of_next_month = datetime(now_date.year + (now_date.month // 12), ((now_date.month % 12) + 1), 1).date()
+    mon_e = first_day_of_next_month - timedelta(days=1)
     salary_date = datetime.fromisoformat(salary_date)
     salary_date = salary_date.strftime('%Y-%m')
-    if salary.search_salary(salary_date=salary_date):
+
+    if salary.search_salary(salary_date):
         return jsonify({
-            'response': 'success'
+            'response': 'always done'
         })
 
     accounts = account.search_account()
@@ -23,7 +29,8 @@ def add_salary():
         [
             acc[0],
             basic_salary.search_basic_salary(role_name=acc[3])[0][1],
-            len(check_in.search_check_in(user_id=acc[0])) * 1000,
+            len(check_in.search_check_in(user_id=acc[0])) * 1000 +
+            len(task.search_task_by_date(mon_b, mon_e, user_id=acc[0])) * 50,
         ]
         for acc in accounts]
     for ll in salary_list:

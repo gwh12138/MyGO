@@ -119,3 +119,36 @@ def search_harvest_info(field_id=None, crop_id=None, harvest_date=None, harvest_
         return None
     finally:
         close_db_connection(db)
+
+
+def search_harvest_info_by_date(begin_date,end_date):
+    """
+    Search harvest info by date
+    :param begin_date:
+    :param end_date:
+    :return:
+    """
+    db = None
+    result = None
+    try:
+        db = get_db_connection()
+        cursor = db.cursor()
+        if begin_date is not None and end_date is not None:
+            sql = "SELECT * FROM harvest_info WHERE harvest_date >= %s AND harvest_date <= %s ORDER BY harvest_date ASC"
+            cursor.execute(sql, (begin_date, end_date))
+        elif begin_date is not None:
+            sql = "SELECT * FROM harvest_info WHERE harvest_date >= %s ORDER BY harvest_date ASC"
+            cursor.execute(sql, (begin_date,))
+        elif end_date is not None:
+            sql = "SELECT * FROM harvest_info WHERE harvest_date <= %s ORDER BY harvest_date ASC"
+            cursor.execute(sql, (end_date,))
+        else:
+            sql = "SELECT * FROM harvest_info ORDER BY harvest_date ASC"
+            cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
+    except pymysql.Error as e:
+        print('Error: ', e)
+        return None
+    finally:
+        close_db_connection(db)

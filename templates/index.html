@@ -92,6 +92,11 @@
                                     <cite>考勤管理</cite></a>
                             </li>
                             <li>
+                                <a onclick="xadmin.add_tab('请假管理','leave.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>请假管理</cite></a>
+                            </li>
+                            <li>
                                 <a onclick="xadmin.add_tab('工资管理','salary.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>工资管理</cite></a>
@@ -168,6 +173,19 @@
                             </li>
                         </ul>
                     </li>
+                    <li id="leave">
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="请假">&#xe726;</i>
+                            <cite>请假</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('请假记录','leave_employee.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>请假记录</cite></a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -225,7 +243,6 @@
                     document.getElementById("field").style.display = "none";
                 }
                 if(role === "admin" || role === "plant" || role === "harvest"){
-                    console.log(role);
                     document.getElementById("harvest").style.display = "block";
                 }
                 else{
