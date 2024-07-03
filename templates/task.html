@@ -124,11 +124,20 @@
 
         // 删除成员
         window.member_complete = function(obj, task_id, task_state) {
+            var today = new Date();
+
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+
             if(task_state === '已接收'){
                 layer.confirm('确认完成了吗？', function(index) {
                     var queryParams = {
                         task_id: task_id,
-                        task_state: '已完成'
+                        task_state: '已完成',
+                        complete_time: today
                     };
                     // 发送删除请求
                     fetch('./change_task',{

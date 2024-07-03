@@ -16,7 +16,7 @@ def add_task():
     task_state = request.json.get("task_state")
     crop_id = None
     field_id = None
-    if None in (operate, description):
+    if None in (operate, description, crop_name, field_name):
         return jsonify({
             'response': 'input none'
         })
@@ -39,6 +39,13 @@ def add_task():
         local_timezone = pytz.timezone('Asia/Shanghai')
         complete_time = complete_time.astimezone(local_timezone)
     res = task.add_task(operate, crop_id, field_id, user_id, description, complete_time, task_state)
+    if operate == '收获':
+        res = plant_info.search_plant_info(field_id, crop_id)
+        if not res:
+            return jsonify({
+                'response': 'did not plant'
+            })
+
     if res is None:
         return jsonify({
             'response': '500',
@@ -83,6 +90,10 @@ def change_task():
     complete_time = request.json.get("complete_time")
     crop_id = None
     field_id = None
+    if task_id is None:
+        return jsonify({
+            'response': 'input none',
+        })
     if crop_name:
         crop_id = crop.search_crop(crop_name=crop_name)
         if not crop_id:
@@ -155,10 +166,11 @@ def search_task():
             'field_id': re[3],
             'user_id': re[4],
             'description': re[5],
-            'complete_time': re[6],
+            'complete_time': None if re[6] is None else re[6].strftime('%Y-%m-%d'),
             'task_state': re[7],
             'crop_name': crop.search_crop(crop_id=re[2])[0][1],
             'field_name': field.search_field(field_id=re[3])[0][1],
+            'real_name': employee_info.search_employee_info(user_id=re[4])[0][1],
         } for re in res]
     }
     return jsonify(resp)

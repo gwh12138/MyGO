@@ -202,11 +202,22 @@ def welcome_harvest_html():
     return flask.render_template('./welcome_harvest.html', user_id=user_id)
 
 
+@app.route("/task_employee.html")
+def task_employee_html():
+    user_id = request.args.get('user_id')
+    role = request.args.get('role')
+    return flask.render_template('./task_employee.html', user_id=user_id, role=role)
+
+
+@app.route("/task_info.html")
+def task_info_html():
+    task_id = request.args.get('task_id')
+    return flask.render_template('./task_info.html', task_id=task_id)
+
+
 @app.route('/01.jpg')
 def img01():
     return app.send_static_file('01.jpg')
-
-
 
 
 if __name__ == '__main__':

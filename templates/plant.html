@@ -349,17 +349,6 @@
             layer.msg('数据加载失败', {icon: 5});
         });
 
-        document.addEventListener('DOMContentLoaded', function(){
-            var role = '{{role}}';
-
-            if(role === 'admin' || role === 'plant'){
-                document.getElementById("add").style.display = 'block';
-            }
-            else{
-                document.getElementById("add").style.display = 'none';
-            }
-        })
-
 
         // 绑定搜索按钮的点击事件
         document.getElementById('search').addEventListener('click', function() {
@@ -411,6 +400,18 @@
         });
     });
 
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var role = '{{role}}';
+            console.log(role);
+            if(role === 'admin' || role === 'plant'){
+                document.getElementById("add").style.display = 'block';
+            }
+            else{
+                document.getElementById("add").style.display = 'none';
+            }
+        })
     </script>
 
 </html>

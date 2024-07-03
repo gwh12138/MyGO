@@ -107,13 +107,15 @@ def search_task(task_id=None, operate=None, crop_id=None, field_id=None,
     db = get_db_connection()
     cursor = db.cursor()
     try:
+        if task_state is None or task_state == '':
+            task_state = None
         params = {"task_id": task_id, "operate": operate, "crop_id": crop_id, "field_id": field_id,
                   "user_id": user_id, "description": description, "complete_time": complete_time,
                   "task_state": task_state}
-        search_parts = [f"{key} = %s" for key, value in params.items() if value is not None]
+        search_parts = [f"{key} = %s" for key, value in params.items() if value is not None and value != ""]
         if search_parts:
             sql = f"SELECT * FROM task WHERE {' AND '.join(search_parts)}"
-            cursor.execute(sql, [value for key, value in params.items() if value is not None])
+            cursor.execute(sql, [value for key, value in params.items() if value is not None and value != ""])
         else:
             sql = "SELECT * FROM task"
             cursor.execute(sql)

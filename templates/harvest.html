@@ -76,6 +76,7 @@
                 {field: 'harvest_date', title: '收获日期', width: 180, sort: true}
             ];
             if(role === "admin" || role === "harvest"){
+                console.log(role);
                 cols.push(
                     {title: '删除', width: 180, templet: function(d){
                         return '<div class="td-manage">' +

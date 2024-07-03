@@ -155,6 +155,19 @@
                             </li>
                         </ul>
                     </li>
+                    <li id="task">
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="任务">&#xe726;</i>
+                            <cite>任务</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('任务管理','task_employee.html?user_id=' + '{{user_id}}' + '&role=' + '{{role}}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>任务管理</cite></a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -212,10 +225,17 @@
                     document.getElementById("field").style.display = "none";
                 }
                 if(role === "admin" || role === "plant" || role === "harvest"){
+                    console.log(role);
                     document.getElementById("harvest").style.display = "block";
                 }
                 else{
                     document.getElementById("harvest").style.display = "none";
+                }
+                if(role === "admin" || role === "plant" || role === "harvest"){
+                    document.getElementById("task").style.display = "block";
+                }
+                else{
+                    document.getElementById("task").style.display = "none";
                 }
 
                 var user_id = '{{user_id}}';
