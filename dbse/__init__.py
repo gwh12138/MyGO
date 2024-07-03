@@ -12,4 +12,5 @@ __all__ = (
     'salary',
     'task',
     'leave',
+    'predict',
 )

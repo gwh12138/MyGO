@@ -15,9 +15,9 @@ def add_crop(crop_name, crop_class, irrigation_per, birth_cycle, yield_per) -> i
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        sql = ("INSERT INTO crop (crop_name, irrigation_per, crop_class, birth_cycle, yield_per) VALUES ("
+        sql = ("INSERT INTO crop (crop_name, crop_class, irrigation_per, birth_cycle, yield_per) VALUES ("
                "%s, %s, %s, %s, %s)")
-        cursor.execute(sql, (crop_name, irrigation_per, crop_class, birth_cycle, yield_per))
+        cursor.execute(sql, (crop_name, crop_class, irrigation_per, birth_cycle, yield_per))
         db.commit()
         if cursor.rowcount == 0:
             return 0

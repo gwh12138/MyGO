@@ -13,6 +13,7 @@ from backend.salary import *
 from backend.task import *
 from backend.leave import *
 from backend.statistics import *
+from backend.predict import *
 import dbse
 
 

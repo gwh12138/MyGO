@@ -20,7 +20,7 @@ def add_harvest_info(field_id, crop_id, harvest_date, harvest_weight) -> int or 
         db.commit()
         if cursor.rowcount == 0:
             return 0
-        return cursor.lastrowid
+        return 1
     except pymysql.Error as e:
         print('Error: ', e)
         return None
