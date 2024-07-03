@@ -283,6 +283,14 @@
                 harvest_weight: harvest_weight
             };
 
+            var plantParams = {
+                crop_id: crop_id,
+                field_id: field_id,
+                user_id: user_id,
+                role: role,
+                crop_state: '已收获'
+            };
+
             if(crop_state === 'mature'){
                 fetch('./add_harvest',{
                     method: 'POST',
@@ -304,6 +312,29 @@
                     } else {
                         // 删除失败
                         layer.msg('收获失败', {icon: 5});
+                    }
+                })
+                .catch(function(error) {
+                    layer.msg('请求失败', {icon: 5});
+                });
+
+                fetch('./change_plant',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(plantParams)
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonData) {
+                //返回success
+                    if (jsonData.response === 'success') {
+                        location.reload();
+                    } else {
+                        // 删除失败
+                        layer.msg('修改失败', {icon: 5});
                     }
                 })
                 .catch(function(error) {
