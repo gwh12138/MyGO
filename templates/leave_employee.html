@@ -116,11 +116,10 @@
         // 绑定搜索按钮的点击事件
         document.getElementById('search').addEventListener('click', function() {
 
-            var real_name = document.getElementById('real_name').value;
             var leave_date = document.getElementById('leave_date').value;
             var leave_state = document.getElementById('leave_state').value;
 
-            if (!real_name && !leave_date && !leave_state) {
+            if (!leave_date && !leave_state) {
                 layer.msg('请输入至少一个搜索条件', {icon: 5});
                 location.reload();
                 return; // 如果所有数据为空，则不执行后续操作
@@ -128,7 +127,7 @@
 
             // 构建查询参数
             var queryParams = {
-                real_name: real_name,
+                user_id: '{{user_id}}',
                 leave_date: leave_date,
                 leave_state: leave_state
             };
