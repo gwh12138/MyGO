@@ -16,6 +16,7 @@ def predict_harvest(crop_id) -> list or None:
         cursor.execute(sql_one, crop_id)
         result_one = cursor.fetchall()
         tmp = [row[1] for row in result_one]
+        tmp_one = [row[0] for row in result_one]
     except pymysql.Error as e:
         print('One_Error: ', e)
         return None
@@ -25,9 +26,12 @@ def predict_harvest(crop_id) -> list or None:
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        sql_two = "SELECT N,P,K,ph FROM field WHERE field_id = %s"
-        cursor.execute(sql_two, result_one[0])
-        result_two = cursor.fetchall()
+        result_two = []
+        for row in tmp_one:
+            sql_two = "SELECT N,P,K,ph FROM field WHERE field_id = %s"
+            cursor.execute(sql_two, row)
+            for i in cursor.fetchall():
+                result_two.append(i)
     except pymysql.Error as e:
         print('Two_Error: ', e)
         return None
