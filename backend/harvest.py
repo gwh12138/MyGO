@@ -50,7 +50,7 @@ def del_harvest():
         return jsonify({
             'response': 'input none'
         })
-    res = harvest_info.del_harvest_info(crop_id, field_id)
+    res = harvest_info.del_harvest_info(field_id, crop_id)
     if res is None:
         return jsonify({
             'response': '500',

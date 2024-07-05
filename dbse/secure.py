@@ -4,7 +4,6 @@ from cryptography.fernet import Fernet
 
 
 class PasswordSecure:
-    # This SECRET_KEY should ideally be securely stored and not hard-coded in a production environment
     key = app.config['SECRET_KEY']
 
     cipher_suite = Fernet(key)

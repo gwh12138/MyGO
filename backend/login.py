@@ -45,7 +45,14 @@ def register():
         return jsonify({
             'response':'input none'
         })
-    
+    if len(user_name) < 3:
+        return jsonify({
+            'response': 'user name too short'
+        })
+    if len(password) < 3:
+        return jsonify({
+            'response': 'password too short'
+        })
     user_id = add_account(user_name, password, role)
     if user_id is None:
         return jsonify({

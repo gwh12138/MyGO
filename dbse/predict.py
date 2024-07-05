@@ -5,7 +5,7 @@ def predict_harvest(crop_id) -> list or None:
     """
 
     :param crop_id:
-    :return: N,P,K,ph,Harvest_Weight
+    :return: [(N,P,K,ph,Harvest_Weight), ...]查询成功 None 查询失败
     """
     db = None
     cursor = None

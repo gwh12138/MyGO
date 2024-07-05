@@ -35,7 +35,6 @@ def del_account(user_id) -> bool or None:
     """
     Delete an account
     :param user_id:
-    :param password:
     :return: True 删除成功 False 删除失败 None 出错
     """
     db = None
@@ -152,9 +151,3 @@ def add_account_batch(account_list: list) -> list or None:
     finally:
         close_db_connection(db)
 
-
-if __name__ == '__main__':
-    # print(del_account(2, 'test'))
-    # print(change_account(10, 'hdo', 'test', 'user'))
-    print(search_account(role= 'user'))
-    # print(add_account_batch([('test1', 'test1', 'user'), ('test2', 'test2', 'user')]))

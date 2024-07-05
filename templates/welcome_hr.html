@@ -22,7 +22,7 @@
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-body ">
-                            <blockquote class="layui-elem-quote">欢迎农田管理员！
+                            <blockquote class="layui-elem-quote">欢迎管人！
                                 <span id="check_state"></span>
                                 <button class="layui-btn" onclick="clock_in()">打卡</button>
                                 <button class="layui-btn" onclick="clock_out()">下班</button>
@@ -31,29 +31,17 @@
                         </div>
                     </div>
                 </div>
+
+                
+                
+               
+                
                 <style id="welcome_style"></style>
             </div>
         </div>
         </div>
     </body>
     <script>
-        // 初始化表格
-        function initTable(data) {
-            var user_id = '{{user_id}}';
-            var cols = [
-                {field: 'oprate', title: '操作', width: 120},
-                {field: 'field_name', title: '对应农田', width: 120, sort: true},
-                {field: 'task_state', title: '任务状态', width: 120, sort: true},
-            ];
-
-
-            table.render({
-                elem: '#jsonTable',
-                cols: [cols],
-                data: data, // 数据接口
-                page: true // 开启分页
-            });
-        }
 
         document.addEventListener('DOMContentLoaded', function() {
             var today = new Date();
@@ -102,7 +90,7 @@
         });
 
 
-        function clock_in(){
+        window.clock_in = function(){
             var today = new Date();
             var formData = {
                 user_id: '{{user_id}}',
@@ -168,7 +156,7 @@
             });
         }
 
-        function clock_out(){
+        window.clock_out = function(){
             var today = new Date();
             var check_in_state;
 
@@ -214,7 +202,7 @@
                     layer.msg('今日未打卡', {icon: 5});
                 }
                 else if(data.check_in_list.length === 1){
-                    fetch('./clock_out',{
+                    fetch('./add_check_in',{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -242,6 +230,37 @@
                 }
                 else{
                     layer.msg('错误的签到状态', {icon: 5});
+                }
+            })
+            .catch(function(error) {
+                layer.msg('获取目标数据失败', {icon: 5});
+            });
+        }
+
+        window.for_leave = function(){
+            var queryParams = {
+                user_id: '{{user_id}}',
+                leave_state: '申请中'
+            };
+
+
+            console.log('DOMContentLoaded 事件已触发');
+            fetch('./search_leave',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(queryParams)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if(data.leave_list.length === 0){
+                    xadmin.open('请假申请','./for_leave_request.html?user_id=' + '{{user_id}}');
+                }
+                else{
+                    layer.msg('有一条正在审批中的申请', {icon: 5});
                 }
             })
             .catch(function(error) {

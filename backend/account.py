@@ -15,6 +15,18 @@ def add_account():
     birthday = request.json.get("birthday")
     work_experience = request.json.get("work_experience")
     profile = request.json.get("profile")
+    if None in (user_name, password):
+        return jsonify({
+            'response': 'input none'
+        })
+    if len(user_name) < 3:
+        return jsonify({
+            'response': 'user name too short'
+        })
+    if len(password < 3):
+        return jsonify({
+            'response': 'password too short'
+        })
 
     res = account.add_account(user_name, password, role)
     if not res:

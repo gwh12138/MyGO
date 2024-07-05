@@ -311,17 +311,15 @@
     })
     .then(function(response) {
         if (response.ok) {
-            return response.text();
+            return response.json();
         } else {
             throw new Error("Network response was not ok.");
         }
     })
     .then(function(message) {
-        if (message.length < 30) {
-            alert(message);
-        } else {
-            document.documentElement.innerHTML = message; // 假设message是一个URL
-        }
+        alert(message.response);
+
+
     })
     .catch(function(error) {
         console.error("An error occurred:", error);

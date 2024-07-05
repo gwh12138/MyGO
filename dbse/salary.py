@@ -2,7 +2,7 @@ from dbse.connection import *
 
 
 def add_salary(user_id, salary_date, basic_salary,
-                 performance_based_salary, total_salary, state = '未发放') -> bool or None:
+               performance_based_salary, total_salary, state='未发放') -> bool or None:
     """
     :param user_id:
     :param salary_date:
@@ -55,7 +55,7 @@ def del_salary(user_id, salary_date) -> bool or None:
 
 
 def change_salary(user_id, salary_date, basic_salary=None,
-                    performance_based_salary=None, total_salary=None, state=None) -> bool or None:
+                  performance_based_salary=None, total_salary=None, state=None) -> bool or None:
     """
     Change a salary
     :param user_id:
@@ -88,7 +88,7 @@ def change_salary(user_id, salary_date, basic_salary=None,
 
 
 def search_salary(user_id=None, salary_date=None, basic_salary=None,
-                 performance_based_salary=None, total_salary=None, state=None) -> list or None:
+                  performance_based_salary=None, total_salary=None, state=None) -> list or None:
     """
     Search salary
     :param user_id:

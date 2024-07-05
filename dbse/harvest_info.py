@@ -8,7 +8,7 @@ def add_harvest_info(field_id, crop_id, harvest_date, harvest_weight) -> int or 
     :param crop_id:
     :param harvest_date:
     :param harvest_weight:
-    :return: harvest_id 添加成功 0 添加失败 None 出错
+    :return: 1 添加成功 0 添加失败 None 出错
     """
     db = None
     try:
@@ -126,7 +126,7 @@ def search_harvest_info_by_date(begin_date,end_date):
     Search harvest info by date
     :param begin_date:
     :param end_date:
-    :return:
+    :return: [(field_id, crop_id, harvest_date, harvest_weight), ...]
     """
     db = None
     result = None

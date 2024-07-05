@@ -6,7 +6,7 @@ def add_basic_salary(role_name, role_salary) -> bool or None:
     Add a new basic salary
     :param role_name:
     :param role_salary:
-    :return:
+    :return:Ture 添加成功 False 添加失败 None 出错
     """
     db = None
     try:

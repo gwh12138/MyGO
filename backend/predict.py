@@ -33,7 +33,7 @@ def predict_harvest():
         model.fit(X, y)
         with open(f'./static/harvest_model{crop_id}.pkl', 'wb') as f:
             pickle.dump(model, f)
-    harvest_weight = model.predict([input_date])
+    harvest_weight = float(model.predict([input_date])[0])
     return jsonify({
         'field_id': field_id,
         'crop_id': crop_id,

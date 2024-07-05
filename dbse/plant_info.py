@@ -122,7 +122,7 @@ def search_plant_info(field_id=None, crop_id=None, plant_date=None, crop_state=N
     :param size:
     :param longitude:
     :param latitude:
-    :return: [(field_id, crop_id, plant_date, crop_state, irrigation, size, longitude, latitude
+    :return: [(field_id, crop_id, plant_date, crop_state, irrigation, size, longitude, latitude), ...]
     """
     db = None
     try:
